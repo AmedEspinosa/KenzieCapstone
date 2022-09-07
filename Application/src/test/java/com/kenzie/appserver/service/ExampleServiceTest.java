@@ -1,6 +1,6 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.repositories.ExampleRepository;
+import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
@@ -15,13 +15,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ExampleServiceTest {
-    private ExampleRepository exampleRepository;
+    private EventRepository exampleRepository;
     private ExampleService exampleService;
     private LambdaServiceClient lambdaServiceClient;
 
     @BeforeEach
     void setup() {
-        exampleRepository = mock(ExampleRepository.class);
+        exampleRepository = mock(EventRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
         exampleService = new ExampleService(exampleRepository, lambdaServiceClient);
     }
