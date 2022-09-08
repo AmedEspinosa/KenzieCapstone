@@ -1,7 +1,7 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.repositories.model.ExampleRecord;
-import com.kenzie.appserver.repositories.ExampleRepository;
+import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.service.model.Example;
 
 import com.kenzie.capstone.service.client.LambdaServiceClient;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExampleService {
-    private ExampleRepository exampleRepository;
+    private EventRepository exampleRepository;
     private LambdaServiceClient lambdaServiceClient;
 
-    public ExampleService(ExampleRepository exampleRepository, LambdaServiceClient lambdaServiceClient) {
+    public ExampleService(EventRepository exampleRepository, LambdaServiceClient lambdaServiceClient) {
         this.exampleRepository = exampleRepository;
         this.lambdaServiceClient = lambdaServiceClient;
     }

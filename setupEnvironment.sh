@@ -5,7 +5,7 @@
 export CAPSTONE_REPO_NAME=ata-capstone-project-andrisr
 
 # Fill out the following value with the group name in all lowercase and no spaces or special characters.
-export GITHUB_GROUP_NAME=wellspring_event_planner
+export GITHUB_GROUP_NAME=wellspring
 
 # Step Two - configure your shell to always have these variables.
 # For OSX / Linux
