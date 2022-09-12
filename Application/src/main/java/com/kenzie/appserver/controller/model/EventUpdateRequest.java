@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller.model;//package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kenzie.appserver.service.model.User;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -20,8 +21,8 @@ public class EventUpdateRequest {
     private String date;
 
     @NotEmpty
-    @JsonProperty("organizer")
-    private String organizer;
+    @JsonProperty("user")
+    private User user;
 
     @NotEmpty
     @JsonProperty("listOfUsersAttending")
@@ -37,11 +38,11 @@ public class EventUpdateRequest {
 
     public EventUpdateRequest(){}
 
-    public EventUpdateRequest(String name, String date, String organizer, List<String> getListOfUsersAttending,
+    public EventUpdateRequest(String name, String date, User user, List<String> getListOfUsersAttending,
                               String address, String description){
         this.name = name;
         this.date = date;
-        this.organizer = organizer;
+        this.user = user;
         this.listOfUsersAttending = getListOfUsersAttending;
         this.address = address;
         this.description = description;
@@ -71,14 +72,6 @@ public class EventUpdateRequest {
         this.date = date;
     }
 
-    public String getOrganizer() {
-        return organizer;
-    }
-
-    public void setOrganizer(String organizer) {
-        this.organizer = organizer;
-    }
-
     public List<String> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
@@ -101,5 +94,13 @@ public class EventUpdateRequest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setOrganizer(User user) {
+        this.user = user;
     }
 }

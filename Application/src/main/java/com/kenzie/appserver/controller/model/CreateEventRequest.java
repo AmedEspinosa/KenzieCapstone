@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller.model;//package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kenzie.appserver.service.model.User;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -16,8 +17,8 @@ public class CreateEventRequest {
     private String date;
 
     @NotEmpty
-    @JsonProperty("organizer")
-    private String organizer;
+    @JsonProperty("user")
+    private User user;
 
     @JsonProperty("listOfUsersAttending")
     private List<String> listOfUsersAttending;
@@ -33,11 +34,11 @@ public class CreateEventRequest {
 
     public CreateEventRequest(){}
 
-    public CreateEventRequest(String name, String date, String organizer, List<String> getListOfUsersAttending,
+    public CreateEventRequest(String name, String date, User user, List<String> getListOfUsersAttending,
                               String address, String description){
         this.name = name;
         this.date = date;
-        this.organizer = organizer;
+        this.user = user;
         this.listOfUsersAttending = getListOfUsersAttending;
         this.address = address;
         this.description = description;
@@ -60,12 +61,12 @@ public class CreateEventRequest {
         this.date = date;
     }
 
-    public String getOrganizer() {
-        return organizer;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrganizer(String organizer) {
-        this.organizer = organizer;
+    public void setUser(User organizer) {
+        this.user = user;
     }
 
     public List<String> getListOfUsersAttending() {

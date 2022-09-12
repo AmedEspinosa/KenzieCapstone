@@ -8,16 +8,16 @@ public class Event {
     private String id;
     private String name;
     private String date;
-    private String organizer;
+    private User user;
     private List<String> listOfUsersAttending;
     private String address;
     private String description;
 
-    public Event(String id, String name, String date, String organizer, List<String> listOfUsersAttending, String address, String description) {
+    public Event(String id, String name, String date, User user, List<String> listOfUsersAttending, String address, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.organizer = organizer;
+        this.user = user;
         this.listOfUsersAttending = listOfUsersAttending;
         this.address = address;
         this.description = description;
@@ -47,12 +47,12 @@ public class Event {
         this.date = date;
     }
 
-    public String getOrganizer() {
-        return organizer;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrganizer(String organizer) {
-        this.organizer = organizer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<String> getListOfUsersAttending() {

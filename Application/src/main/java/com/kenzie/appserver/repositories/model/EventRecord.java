@@ -3,16 +3,16 @@ package com.kenzie.appserver.repositories.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.kenzie.appserver.service.model.User;
 
 import java.util.List;
 
 @DynamoDBTable(tableName = "Events")
 public class EventRecord {
-
     private String id;
     private String name;
     private String date;
-    private String organizer;                                                  //Allowed to have User type in DB? Need to Switch if thats the case
+    private User user;                                                  //Allowed to have User type in DB? Need to Switch if thats the case
     private List<String> listOfUsersAttending;                                 //Should we take out? do we need?
     private String address;
     private String description;
@@ -44,13 +44,13 @@ public class EventRecord {
         this.date = date;
     }
 
-    @DynamoDBAttribute(attributeName = "Organizer")
-    public String getOrganizer() {
-        return organizer;
+    @DynamoDBAttribute(attributeName = "User")
+    public User getUser() {
+        return user;
     }
 
-    public void setOrganizer(String organizer) {
-        this.organizer = organizer;
+    public void setOrganizer(User user) {
+        this.user = user;
     }
 
     @DynamoDBAttribute(attributeName = "ListOfUsersAttending")
