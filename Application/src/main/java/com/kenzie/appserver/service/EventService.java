@@ -3,12 +3,14 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.EventRepository;
-import com.kenzie.appserver.repositories.model.ExampleRecord;
 import com.kenzie.appserver.service.model.Example;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.model.ExampleData;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,6 +56,23 @@ public class EventService {
         return record.map(this::recordToResponse).orElse(null);
     }
 
+    public EventResponse updateEventById(String id, String name, String date, String organizer, List<String> listOfUsers,
+                                                                                  String address, String description){
+        Optional<EventRecord> eventExists = eventRepository.findById(id);
+        if (eventExists.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer Not Found");
+        }
+        EventRecord eventRecord = eventExists.get();
+        eventRecord.setName(name);
+        eventRecord.setDate(date);
+        eventRecord.setOrganizer(organizer);
+        eventRecord.setListOfUsersAttending(listOfUsers);
+        eventRecord.setAddress(address);
+        eventRecord.setDescription(description);
+        eventRepository.save(eventRecord);
+
+        return recordToResponse(eventRecord);
+    }
 
 
     public EventResponse recordToResponse(EventRecord eventRecord){
