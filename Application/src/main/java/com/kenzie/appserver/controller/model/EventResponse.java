@@ -2,7 +2,6 @@ package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.catalina.User;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class EventResponse {
     private String organizer;
 
     @JsonProperty("listOfUsersAttending")
-    private List<String> listOfUsersAttending;
+    private List<List<String>> listOfUsersAttending;
 
     @JsonProperty("address")
     private String address;
@@ -62,11 +61,11 @@ public class EventResponse {
         this.organizer = organizer;
     }
 
-    public List<String> getListOfUsersAttending() {
+    public List<List<String>> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
 
-    public void setListOfUsersAttending(List<String> listOfUsersAttending) {
+    public void setListOfUsersAttending(List<List<String>> listOfUsersAttending) {
         this.listOfUsersAttending = listOfUsersAttending;
     }
 

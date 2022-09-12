@@ -1,11 +1,12 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.controller.model.CreateEventRequest;
+import com.kenzie.appserver.controller.model.EventResponse;
+import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.EventRepository;
-import com.kenzie.appserver.service.model.Example;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import net.andreinc.mockneat.MockNeat;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,9 +55,43 @@ public class EventServiceTest {
         Optional<EventRecord> eventResponse = eventRepository.findById(id);
 
         // THEN
-        Assertions.assertNotNull(eventResponse, "The object is returned");
+        Assertions.assertNotNull(eventResponse, "The event is returned");
         Assertions.assertEquals(record.getId(), eventResponse.get().getId(), "The id matches");
         Assertions.assertEquals(record.getName(), eventResponse.get().getName(), "The name matches");
+    }
+
+    @Test
+    void addNewEvent() {
+
+        String eventName = mockNeat.strings().get();
+
+        CreateEventRequest request = new CreateEventRequest();
+        request.setName(eventName);
+        request.setDate(LocalDate.now().toString());
+        request.setOrganizer(mockNeat.strings().get());
+        request.setListOfUsersAttending(mock(List.class));
+        request.setDescription(mockNeat.strings().get());
+
+        ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
+
+        // WHEN
+        EventResponse eventResponse = eventService.addNewEvent(request);
+
+        // THEN
+        Assertions.assertNotNull(eventResponse);
+
+        verify(eventRepository).save(eventRecordCaptor.capture());
+
+        EventRecord record = eventRecordCaptor.getValue();
+
+        Assertions.assertNotNull(record, "The event record is returned");
+        Assertions.assertNotNull(record.getId(), "The event id exists");
+        Assertions.assertEquals(record.getName(), eventName, "The event name matches");
+        Assertions.assertEquals(record.getDate(), request.getDate(), "Dates match");
+        Assertions.assertEquals(record.getOrganizer(), request.getOrganizer(), "Both organizers match");
+        Assertions.assertEquals(record.getListOfUsersAttending(), request.getListOfUsersAttending(), "Lists match");
+        Assertions.assertEquals(record.getAddress(), request.getAddress(), "Address match");
+        Assertions.assertEquals(record.getDescription(), request.getDescription(), "Descriptions match");
     }
 
     @Test
@@ -100,10 +135,6 @@ public class EventServiceTest {
         Assertions.assertEquals(record.getListOfUsersAttending(), newListOfUsersAttending, "Lists match");
         Assertions.assertEquals(record.getAddress(), newAddress, "Both of the address matches");
         Assertions.assertEquals(record.getDescription(), newDescription, "The descriptions match");
-
-
-
-
     }
 
 }

@@ -1,32 +1,49 @@
-package com.kenzie.appserver.repositories.model;
+package com.kenzie.appserver.controller.model;//package com.kenzie.appserver.controller.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-@DynamoDBTable(tableName = "Events")
-public class EventRecord {
+public class CreateEventRequest {
 
-    private String id;
+    @NotEmpty
+    @JsonProperty("name")
     private String name;
+
+    @NotEmpty
+    @JsonProperty("date")
     private String date;
-    private String organizer;                                                  //Allowed to have User type in DB? Need to Switch if thats the case
-    private List<String> listOfUsersAttending;                                 //Should we take out? do we need?
+
+    @NotEmpty
+    @JsonProperty("organizer")
+    private String organizer;
+
+    @JsonProperty("listOfUsersAttending")
+    private List<String> listOfUsersAttending;
+
+    @NotEmpty
+    @JsonProperty("address")
     private String address;
+
+    @NotEmpty
+    @JsonProperty("description")
     private String description;
 
-    @DynamoDBHashKey(attributeName = "Id")
-    public String getId() {
-        return id;
+
+    public CreateEventRequest(){}
+
+    public CreateEventRequest(String name, String date, String organizer, List<String> getListOfUsersAttending,
+                              String address, String description){
+        this.name = name;
+        this.date = date;
+        this.organizer = organizer;
+        this.listOfUsersAttending = getListOfUsersAttending;
+        this.address = address;
+        this.description = description;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
-    @DynamoDBAttribute(attributeName = "Name")
     public String getName() {
         return name;
     }
@@ -35,7 +52,6 @@ public class EventRecord {
         this.name = name;
     }
 
-    @DynamoDBAttribute(attributeName = "Date")
     public String getDate() {
         return date;
     }
@@ -44,7 +60,6 @@ public class EventRecord {
         this.date = date;
     }
 
-    @DynamoDBAttribute(attributeName = "Organizer")
     public String getOrganizer() {
         return organizer;
     }
@@ -53,7 +68,6 @@ public class EventRecord {
         this.organizer = organizer;
     }
 
-    @DynamoDBAttribute(attributeName = "ListOfUsersAttending")
     public List<String> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
@@ -62,7 +76,6 @@ public class EventRecord {
         this.listOfUsersAttending = listOfUsersAttending;
     }
 
-    @DynamoDBAttribute(attributeName = "Address")
     public String getAddress() {
         return address;
     }
@@ -71,7 +84,6 @@ public class EventRecord {
         this.address = address;
     }
 
-    @DynamoDBAttribute(attributeName = "Description")
     public String getDescription() {
         return description;
     }
