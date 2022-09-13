@@ -82,6 +82,8 @@ public class EventService {
         return recordToResponse(eventRecord);
     }
 
+    public void deleteEvent(String eventId){ eventRepository.deleteById(eventId);}
+
     public EventResponse recordToResponse(EventRecord eventRecord){
 
         if (eventRecord == null){

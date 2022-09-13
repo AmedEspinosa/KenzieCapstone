@@ -42,8 +42,8 @@ public class EventController {
     }
 
     // What do we want to be available to be updated?
-    @PostMapping("/{id}")
-    public ResponseEntity<EventResponse> updateCustomer(@RequestBody EventUpdateRequest eventUpdateRequest) {
+    @PostMapping
+    public ResponseEntity<EventResponse> updateEvent(@RequestBody EventUpdateRequest eventUpdateRequest) {
 
         EventResponse eventResponse = eventService.updateEventById(eventUpdateRequest.getId(),
                                                                eventUpdateRequest.getName(),
@@ -56,5 +56,10 @@ public class EventController {
         return ResponseEntity.ok(eventResponse);
     }
 
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity deleteEventById(@PathVariable("customerId") String eventId) {
+        eventService.deleteEvent(eventId);
+        return ResponseEntity.ok().build();
+    }
 
 }

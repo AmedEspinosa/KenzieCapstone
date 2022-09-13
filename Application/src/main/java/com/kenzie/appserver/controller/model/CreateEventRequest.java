@@ -9,6 +9,10 @@ import java.util.List;
 public class CreateEventRequest {
 
     @NotEmpty
+    @JsonProperty("id")
+    private String id;
+
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
@@ -44,6 +48,14 @@ public class CreateEventRequest {
         this.description = description;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -64,7 +76,7 @@ public class CreateEventRequest {
         return user;
     }
 
-    public void setUser(User organizer) {
+    public void setUser(User user) {
         this.user = user;
     }
 
