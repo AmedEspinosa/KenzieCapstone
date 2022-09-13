@@ -2,9 +2,9 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
-import com.kenzie.appserver.repositories.model.EventUserRepository;
+import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
-import com.kenzie.appserver.repositories.model.EventRepository;
+import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import net.andreinc.mockneat.MockNeat;
@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,7 +48,7 @@ public class EventServiceTest {
         // GIVEN
         String id = randomUUID().toString();
         List<String> usersAttending = mock(List.class);
-        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get());
+        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         EventRecord record = new EventRecord();
         record.setId(id);
@@ -54,11 +57,9 @@ public class EventServiceTest {
         record.setListOfUsersAttending(usersAttending);
         record.setAddress(mockNeat.strings().get());
         record.setDescription(mockNeat.strings().get());
-
         // WHEN
         when(eventRepository.findById(id)).thenReturn(Optional.of(record));
         Optional<EventRecord> eventResponse = eventRepository.findById(id);
-
         // THEN
         Assertions.assertNotNull(eventResponse, "The event is returned");
         Assertions.assertEquals(record.getId(), eventResponse.get().getId(), "The id matches");
@@ -69,7 +70,7 @@ public class EventServiceTest {
     void addNewEvent() {
 
         String eventName = mockNeat.strings().get();
-        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get());
+        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         CreateEventRequest request = new CreateEventRequest();
         request.setName(eventName);
@@ -79,13 +80,10 @@ public class EventServiceTest {
         request.setDescription(mockNeat.strings().get());
 
         ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
-
         // WHEN
         EventResponse eventResponse = eventService.addNewEvent(request);
-
         // THEN
         Assertions.assertNotNull(eventResponse);
-
         verify(eventRepository).save(eventRecordCaptor.capture());
 
         EventRecord record = eventRecordCaptor.getValue();
@@ -100,10 +98,24 @@ public class EventServiceTest {
     }
 
     @Test
+    void addNewEvent_CreateEventRequest_IsNull_Throws_Exception() {
+
+        CreateEventRequest createEventRequest = null;
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.addNewEvent(createEventRequest));
+        // THEN
+        try {
+            verify(eventRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
+    }
+
+    @Test
     void updateEventById() {
 
         String eventId = randomUUID().toString();
-        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get());
+        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         EventRecord oldEventRecord = new EventRecord();
         oldEventRecord.setId(eventId);
@@ -124,10 +136,8 @@ public class EventServiceTest {
         List<String> newListOfUsersAttending = mock(List.class);
         String newAddress = mockNeat.strings().get();
         String newDescription = mockNeat.strings().get();
-
         // WHEN
         eventService.updateEventById(eventId, newName, newDate, newUser, newListOfUsersAttending, newAddress, newDescription);
-
         // THEN
         verify(eventRepository).save(eventRecordCaptor.capture());
 
@@ -140,6 +150,21 @@ public class EventServiceTest {
         Assertions.assertEquals(record.getListOfUsersAttending(), newListOfUsersAttending, "Lists match");
         Assertions.assertEquals(record.getAddress(), newAddress, "Both of the address matches");
         Assertions.assertEquals(record.getDescription(), newDescription, "The descriptions match");
+    }
+
+    @Test
+    void updateEventById_IdIsNull_throws_responseStatusException() {
+        String eventID = null;
+        when(eventRepository.findById(eventID)).thenReturn(Optional.empty());
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.updateEventById(eventID, null,
+                                                null, null, null,null , null));
+        // THEN
+        try {
+            verify(eventRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
     }
 
 }

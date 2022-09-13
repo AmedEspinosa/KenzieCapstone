@@ -9,9 +9,11 @@ import java.util.List;
 
 @DynamoDBTable(tableName = "Users")
 public class UserRecord {
-    private String name;                                                  //Allowed to have User type in DB? Need to Switch if thats the case
+    private String name;
     private String id;
+    private String email;
 
+    @DynamoDBHashKey(attributeName = "Name")
     public String getName() {
         return name;
     }
@@ -20,6 +22,7 @@ public class UserRecord {
         this.name = name;
     }
 
+    @DynamoDBAttribute(attributeName = "Id")
     public String getId() {
         return id;
     }
@@ -28,5 +31,12 @@ public class UserRecord {
         this.id = id;
     }
 
+    @DynamoDBAttribute(attributeName = "Email")
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

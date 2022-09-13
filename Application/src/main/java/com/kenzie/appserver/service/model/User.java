@@ -3,8 +3,9 @@ package com.kenzie.appserver.service.model;
 public class User {
     private String id;
     private String name;
+    private String email;
 
-    public User(String id, String name) {
+    public User(String id, String name, String email) {
         this.id = id;
         this.name = name;
     }
@@ -25,4 +26,11 @@ public class User {
         this.name = name;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

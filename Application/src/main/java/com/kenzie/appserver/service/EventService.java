@@ -2,9 +2,9 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
-import com.kenzie.appserver.repositories.model.EventUserRepository;
+import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
-import com.kenzie.appserver.repositories.model.EventRepository;
+import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import org.springframework.http.HttpStatus;
@@ -16,16 +16,17 @@ import java.util.*;
 @Service
 public class EventService {
     private EventRepository eventRepository;
-    private EventUserRepository eventOrganizerRepository;
+    private EventUserRepository eventUserRepository;
     private LambdaServiceClient lambdaServiceClient;
 
-    public EventService(EventRepository eventRepository, LambdaServiceClient lambdaServiceClient, EventUserRepository eventOrganizerRepository) {
+    public EventService(EventRepository eventRepository, LambdaServiceClient lambdaServiceClient, EventUserRepository eventUserRepository) {
         this.eventRepository = eventRepository;
         this.lambdaServiceClient = lambdaServiceClient;
-        this.eventOrganizerRepository = eventOrganizerRepository;
+        this.eventUserRepository = eventUserRepository;
     }
 
     public EventResponse getEventById(String id){
+
         Optional<EventRecord> record = eventRepository.findById(id);
         return record.map(this::recordToResponse).orElse(null);
     }
@@ -40,7 +41,7 @@ public class EventService {
         if (eventExists.isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer Not Found");
         }
-//        if (eventOrganizerRepository.existsById(user.getId())){
+//        if (eventUserRepository.existsById(user.getId())){
             EventRecord eventRecord = eventExists.get();
             eventRecord.setName(name);
             eventRecord.setDate(date);
