@@ -1,34 +1,52 @@
-package com.kenzie.appserver.controller.model;
+package com.kenzie.appserver.controller.model;//package com.kenzie.appserver.controller.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenzie.appserver.service.model.User;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class EventResponse {
+public class EventUpdateRequest {
 
+    @NotEmpty
     @JsonProperty("id")
     private String id;
 
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
+    @NotEmpty
     @JsonProperty("date")
     private String date;
 
+    @NotEmpty
     @JsonProperty("user")
     private User user;
 
+    @NotEmpty
     @JsonProperty("listOfUsersAttending")
-    private List<List<String>> listOfUsersAttending;
+    private List<String> listOfUsersAttending;
 
+    @NotEmpty
     @JsonProperty("address")
     private String address;
 
+    @NotEmpty
     @JsonProperty("description")
     private String description;
+
+    public EventUpdateRequest(){}
+
+    public EventUpdateRequest(String name, String date, User user, List<String> getListOfUsersAttending,
+                              String address, String description){
+        this.name = name;
+        this.date = date;
+        this.user = user;
+        this.listOfUsersAttending = getListOfUsersAttending;
+        this.address = address;
+        this.description = description;
+    }
 
     public String getId() {
         return id;
@@ -54,19 +72,11 @@ public class EventResponse {
         this.date = date;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<List<String>> getListOfUsersAttending() {
+    public List<String> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
 
-    public void setListOfUsersAttending(List<List<String>> listOfUsersAttending) {
+    public void setListOfUsersAttending(List<String> listOfUsersAttending) {
         this.listOfUsersAttending = listOfUsersAttending;
     }
 
@@ -84,5 +94,13 @@ public class EventResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setOrganizer(User user) {
+        this.user = user;
     }
 }

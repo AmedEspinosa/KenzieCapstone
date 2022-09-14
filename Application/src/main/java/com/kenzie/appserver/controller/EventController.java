@@ -1,10 +1,16 @@
 package com.kenzie.appserver.controller;
 
+import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
+import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
-import com.kenzie.appserver.service.ExampleService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.net.URI;
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/events")
@@ -12,7 +18,7 @@ public class EventController {
 
     private EventService eventService;
 
-    EventController(ExampleService exampleService) {
+    EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
@@ -25,6 +31,35 @@ public class EventController {
         return ResponseEntity.ok(eventResponse);
     }
 
+    @PostMapping
+    public ResponseEntity<EventResponse> addEvent(@RequestBody CreateEventRequest createEventRequest){
+        if (createEventRequest != null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Customer Name");
+        }
+        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
+        return ResponseEntity.created(URI.create("/event/" + eventResponse.getName())).body(eventResponse);
+    }
+
+    // What do we want to be available to be updated?
+    @PostMapping
+    public ResponseEntity<EventResponse> updateEvent(@RequestBody EventUpdateRequest eventUpdateRequest) {
+
+        EventResponse eventResponse = eventService.updateEventById(eventUpdateRequest.getId(),
+                                                               eventUpdateRequest.getName(),
+                                                               eventUpdateRequest.getDate(),
+                                                               eventUpdateRequest.getUser(),
+                                                               eventUpdateRequest.getListOfUsersAttending(),
+                                                               eventUpdateRequest.getAddress(),
+                                                               eventUpdateRequest.getDescription());
+
+        return ResponseEntity.ok(eventResponse);
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity deleteEventById(@PathVariable("customerId") String eventId) {
+        eventService.deleteEvent(eventId);
+        return ResponseEntity.ok().build();
+    }
 
 }

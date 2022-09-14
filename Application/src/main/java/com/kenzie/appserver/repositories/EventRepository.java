@@ -1,4 +1,4 @@
-package com.kenzie.appserver.repositories.model;
+package com.kenzie.appserver.repositories;
 
 import com.kenzie.appserver.repositories.model.EventRecord;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
