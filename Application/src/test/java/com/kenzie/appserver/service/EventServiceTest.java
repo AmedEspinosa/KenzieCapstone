@@ -53,7 +53,7 @@ public class EventServiceTest {
         EventRecord record = new EventRecord();
         record.setId(id);
         record.setName(mockNeat.strings().get());
-        record.setOrganizer(user);
+        record.setUser(user);
         record.setListOfUsersAttending(usersAttending);
         record.setAddress(mockNeat.strings().get());
         record.setDescription(mockNeat.strings().get());
@@ -121,7 +121,7 @@ public class EventServiceTest {
         oldEventRecord.setId(eventId);
         oldEventRecord.setName(mockNeat.strings().get());
         oldEventRecord.setDate(LocalDate.now().minusDays(2).toString());
-        oldEventRecord.setOrganizer(user);
+        oldEventRecord.setUser(user);
         oldEventRecord.setListOfUsersAttending(mock(List.class));
         oldEventRecord.setAddress(mockNeat.strings().get());
         oldEventRecord.setDescription(mockNeat.strings().get());
