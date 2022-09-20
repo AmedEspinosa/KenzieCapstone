@@ -45,7 +45,7 @@ export default class EventClient extends BaseClass {
             const response = await this.client.get(`/events/all`);
             return response.data;
         } catch (error) {
-            this.handleError("getAllRsvps", error, errorCallback)
+            this.handleError("getAllEvents", error, errorCallback)
         }
     }
 
