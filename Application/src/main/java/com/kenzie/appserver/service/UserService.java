@@ -1,23 +1,16 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.CreateUserRequest;
-import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.UserResponse;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.EventUserRepository;
-import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.model.UserRecord;
-import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -25,7 +18,7 @@ public class UserService {
     private EventUserRepository eventUserRepository;
     private LambdaServiceClient lambdaServiceClient;
 
-    public UserService(EventRepository eventRepository, LambdaServiceClient lambdaServiceClient, EventUserRepository eventUserRepository) {
+    public UserService(EventUserRepository eventUserRepository) {
         this.eventRepository = eventRepository;
         this.lambdaServiceClient = lambdaServiceClient;
         this.eventUserRepository = eventUserRepository;
