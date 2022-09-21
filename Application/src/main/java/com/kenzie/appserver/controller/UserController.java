@@ -14,7 +14,7 @@ import java.net.URI;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     UserController(UserService userService) {
         this.userService = userService;
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<UserResponse> updateCustomer(@RequestBody UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
 
         UserResponse userResponse = userService.updateUser(userUpdateRequest.getId(), userUpdateRequest.getName(),
                                                            userUpdateRequest.getEmail());
@@ -48,5 +48,10 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUserById(@PathVariable("userId") String userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
 
 }

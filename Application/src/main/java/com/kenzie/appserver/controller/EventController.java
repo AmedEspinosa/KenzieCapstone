@@ -16,7 +16,7 @@ import java.util.Collections;
 @RequestMapping("/events")
 public class EventController {
 
-    private EventService eventService;
+    private final EventService eventService;
 
     EventController(EventService eventService) {
         this.eventService = eventService;
@@ -49,15 +49,14 @@ public class EventController {
                                                                eventUpdateRequest.getName(),
                                                                eventUpdateRequest.getDate(),
                                                                eventUpdateRequest.getUser(),
-                                                               eventUpdateRequest.getListOfUsersAttending(),
+                                                               eventUpdateRequest.getListOfAttending(),
                                                                eventUpdateRequest.getAddress(),
                                                                eventUpdateRequest.getDescription());
-
         return ResponseEntity.ok(eventResponse);
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity deleteEventById(@PathVariable("customerId") String eventId) {
+    public ResponseEntity deleteEventById(@PathVariable("eventId") String eventId) {
         eventService.deleteEvent(eventId);
         return ResponseEntity.ok().build();
     }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -34,8 +35,8 @@ public class UserService {
 
         UserRecord userRecord = new UserRecord();
 
-        if (createUserRequest.getName() != null && createUserRequest.getId() != null && createUserRequest.getEmail() != null){
-            userRecord.setId(createUserRequest.getId());
+        if (createUserRequest.getName() != null && createUserRequest.getEmail() != null){
+            userRecord.setId(UUID.randomUUID().toString());
             userRecord.setName(createUserRequest.getName());
             userRecord.setEmail(createUserRequest.getEmail());
             eventUserRepository.save(userRecord);

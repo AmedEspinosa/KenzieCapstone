@@ -13,6 +13,13 @@ public class UserRecord {
     private String id;
     private String email;
 
+    public UserRecord(){}
+    public UserRecord(String name, String id, String email) {
+        this.name = name;
+        this.id = id;
+        this.email = email;
+    }
+
     @DynamoDBHashKey(attributeName = "Name")
     public String getName() {
         return name;

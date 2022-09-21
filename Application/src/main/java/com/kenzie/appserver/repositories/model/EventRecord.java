@@ -12,8 +12,8 @@ public class EventRecord {
     private String id;
     private String name;
     private String date;
-    private User user;                                                  //Allowed to have User type in DB? Need to Switch if thats the case
-    private List<String> listOfUsersAttending;                                 //Should we take out? do we need?
+    private User user;
+    private List<String> listOfAttending;
     private String address;
     private String description;
 
@@ -53,13 +53,13 @@ public class EventRecord {
         this.user = user;
     }
 
-    @DynamoDBAttribute(attributeName = "ListOfUsersAttending")
-    public List<String> getListOfUsersAttending() {
-        return listOfUsersAttending;
+    @DynamoDBAttribute(attributeName = "ListOfAttending")
+    public List<String> getListOfAttending() {
+        return listOfAttending;
     }
 
-    public void setListOfUsersAttending(List<String> listOfUsersAttending) {
-        this.listOfUsersAttending = listOfUsersAttending;
+    public void setListOfAttending(List<String> listOfAttending) {
+        this.listOfAttending = listOfAttending;
     }
 
     @DynamoDBAttribute(attributeName = "Address")

@@ -23,7 +23,7 @@ Resources:
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: false
       BillingMode: PAY_PER_REQUEST
-      TableName: "Events"
+      TableName: "events"
       GlobalSecondaryIndexes:
         - IndexName: "EventName"
           KeySchema:
@@ -32,7 +32,5 @@ Resources:
           Projection:
             ProjectionType: ALL
 
-#   aws cloudformation create-stack --stack-name lambda-table --template-body file://LambdaExampleTable.yml --capabilities CAPABILITY_IAM
-
-#  aws cloudformation deploy --template-file /Users/bestjavaprogrammer/Curriculum/ata-repos/ata-capstone-project-bestjavaprogrammer/lambda-service-development.yml--stack-name capstone-project-bestjavaprogrammer-service-dev --capabilities CAPABILITY_NAMED_IAM
-#  aws cloudformation deploy --template-file /Users/bobbyandris/kenzie_backend_development/ata-capstone-project-andrisr/LambdaEventTable.yml--stack-name ata-capstone-project-andrisr-service-dev --capabilities CAPABILITY_NAMED_IAM
+#   aws cloudformation create-stack --stack-name lambda-table --template-body file://LambdaExampleTable.yml --capabilities CAPABILITY_IAM   // Example
+#   aws cloudformation create-stack --stack-name events --template-body file://LambdaEventTable.yml --capabilities CAPABILITY_IAM

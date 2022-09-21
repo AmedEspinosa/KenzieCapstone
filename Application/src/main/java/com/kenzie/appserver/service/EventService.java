@@ -46,14 +46,15 @@ public class EventService {
             eventRecord.setName(name);
             eventRecord.setDate(date);
             eventRecord.setUser(user);
-            eventRecord.setListOfUsersAttending(listOfUsers);
+            eventRecord.setListOfAttending(listOfUsers);
             eventRecord.setAddress(address);
             eventRecord.setDescription(description);
             eventRepository.save(eventRecord);
 
             return recordToResponse(eventRecord);
-//        }
+//        } else {
 //        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Organizer");
+//        }
     }
 
     /**
@@ -65,12 +66,12 @@ public class EventService {
         EventRecord eventRecord = new EventRecord();
 
         if (createEventRequest != null){
-//            if (eventOrganizerRepository.existsById(createEventRequest.getUser().getId())) {
+//            if (eventUserRepository.existsById(createEventRequest.getUser().getId())) {
                 eventRecord.setId(UUID.randomUUID().toString());
                 eventRecord.setName(createEventRequest.getName());
                 eventRecord.setDate(createEventRequest.getDate());
                 eventRecord.setUser(createEventRequest.getUser());
-                eventRecord.setListOfUsersAttending(createEventRequest.getListOfUsersAttending());
+                eventRecord.setListOfAttending(createEventRequest.getListOfAttending());
                 eventRecord.setAddress(createEventRequest.getAddress());
                 eventRecord.setDescription(createEventRequest.getDescription());
                 eventRepository.save(eventRecord);
@@ -84,6 +85,7 @@ public class EventService {
 
     public void deleteEvent(String eventId){ eventRepository.deleteById(eventId);}
 
+
     public EventResponse recordToResponse(EventRecord eventRecord){
 
         if (eventRecord == null){
@@ -94,7 +96,7 @@ public class EventService {
         eventResponse.setName(eventRecord.getName());
         eventResponse.setDate(eventRecord.getDate());
         eventResponse.setUser(eventRecord.getUser());
-        eventResponse.setListOfUsersAttending(Collections.singletonList(eventRecord.getListOfUsersAttending()));
+        eventResponse.setListOfAttending(eventRecord.getListOfAttending());
         eventResponse.setAddress(eventRecord.getAddress());
         eventResponse.setDescription(eventRecord.getDescription());
 

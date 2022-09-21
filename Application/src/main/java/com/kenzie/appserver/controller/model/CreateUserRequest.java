@@ -9,10 +9,6 @@ import java.util.List;
 public class CreateUserRequest {
 
     @NotEmpty
-    @JsonProperty("id")
-    private String id;
-
-    @NotEmpty
     @JsonProperty("name")
     private String name;
 
@@ -22,18 +18,9 @@ public class CreateUserRequest {
 
     public CreateUserRequest(){}
 
-    public CreateUserRequest(String id, String name, String email){
-        this.id = id;
+    public CreateUserRequest(String name, String email){
         this.name = name;
         this.email = email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
