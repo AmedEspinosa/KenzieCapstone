@@ -56,7 +56,7 @@ class ExampleControllerTest {
         createEventRequest.setName(mockNeat.strings().get());
         createEventRequest.setDate(mockNeat.strings().get());
         createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfUsersAttending(mock(List.class));
+        createEventRequest.setListOfAttending(mock(List.class));
         createEventRequest.setAddress(mockNeat.strings().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
@@ -74,8 +74,8 @@ class ExampleControllerTest {
                         .value(is(createEventRequest.getDate())))
                 .andExpect(jsonPath("user")
                         .value(is(createEventRequest.getUser())))
-                .andExpect(jsonPath("listOfUsersAttending")
-                        .value(is(createEventRequest.getListOfUsersAttending())))
+                .andExpect(jsonPath("listOfAttending")
+                        .value(is(createEventRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
                         .value(is(createEventRequest.getAddress())))
                 .andExpect(jsonPath("description")
@@ -91,7 +91,7 @@ class ExampleControllerTest {
         createEventRequest.setName(mockNeat.strings().get());
         createEventRequest.setDate(mockNeat.strings().get());
         createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfUsersAttending(mock(List.class));
+        createEventRequest.setListOfAttending(mock(List.class));
         createEventRequest.setAddress(mockNeat.strings().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
@@ -106,8 +106,8 @@ class ExampleControllerTest {
                         .value(is(createEventRequest.getDate())))
                 .andExpect(jsonPath("user")
                         .value(is(createEventRequest.getUser())))
-                .andExpect(jsonPath("listOfUsersAttending")
-                        .value(is(createEventRequest.getListOfUsersAttending())))
+                .andExpect(jsonPath("listOfAttending")
+                        .value(is(createEventRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
                         .value(is(createEventRequest.getAddress())))
                 .andExpect(jsonPath("description")
@@ -125,7 +125,7 @@ class ExampleControllerTest {
         createEventRequest.setName(mockNeat.strings().get());
         createEventRequest.setDate(mockNeat.strings().get());
         createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfUsersAttending(mock(List.class));
+        createEventRequest.setListOfAttending(mock(List.class));
         createEventRequest.setAddress(mockNeat.strings().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
@@ -135,7 +135,7 @@ class ExampleControllerTest {
         EventUpdateRequest updateRequest = new EventUpdateRequest();
         updateRequest.setName(mockNeat.strings().get());
         updateRequest.setDate(mockNeat.strings().get());
-        updateRequest.setListOfUsersAttending(mock(List.class));
+        updateRequest.setListOfAttending(mock(List.class));
         updateRequest.setAddress(mockNeat.strings().get());
         updateRequest.setDescription(mockNeat.strings().get());
 
@@ -151,8 +151,8 @@ class ExampleControllerTest {
                         .value(is(updateRequest.getDate())))
                 .andExpect(jsonPath("user")
                         .value(is(updateRequest.getUser())))
-                .andExpect(jsonPath("listOfUsersAttending")
-                        .value(is(updateRequest.getListOfUsersAttending())))
+                .andExpect(jsonPath("listOfAttending")
+                        .value(is(updateRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
                         .value(is(updateRequest.getAddress())))
                 .andExpect(jsonPath("description")
@@ -170,7 +170,7 @@ class ExampleControllerTest {
         createEventRequest.setName(mockNeat.strings().get());
         createEventRequest.setDate(mockNeat.strings().get());
         createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfUsersAttending(mock(List.class));
+        createEventRequest.setListOfAttending(mock(List.class));
         createEventRequest.setAddress(mockNeat.strings().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 

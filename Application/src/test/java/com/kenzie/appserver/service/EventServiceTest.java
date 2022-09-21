@@ -6,6 +6,7 @@ import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
+import com.kenzie.appserver.repositories.model.UserRecord;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import net.andreinc.mockneat.MockNeat;
@@ -55,7 +56,7 @@ public class EventServiceTest {
         record.setId(id);
         record.setName(mockNeat.strings().get());
         record.setUser(user);
-        record.setListOfUsersAttending(usersAttending);
+        record.setListOfAttending(usersAttending);
         record.setAddress(mockNeat.strings().get());
         record.setDescription(mockNeat.strings().get());
         // WHEN
@@ -77,7 +78,7 @@ public class EventServiceTest {
         request.setName(eventName);
         request.setDate(LocalDate.now().toString());
         request.setUser(user);
-        request.setListOfUsersAttending(mock(List.class));
+        request.setListOfAttending(mock(List.class));
         request.setDescription(mockNeat.strings().get());
 
         ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
@@ -93,7 +94,7 @@ public class EventServiceTest {
         Assertions.assertNotNull(record.getId(), "The event id exists");
         Assertions.assertEquals(record.getName(), eventName, "The event name matches");
         Assertions.assertEquals(record.getDate(), request.getDate(), "Dates match");
-        Assertions.assertEquals(record.getListOfUsersAttending(), request.getListOfUsersAttending(), "Lists match");
+        Assertions.assertEquals(record.getListOfAttending(), request.getListOfAttending(), "Lists match");
         Assertions.assertEquals(record.getAddress(), request.getAddress(), "Address match");
         Assertions.assertEquals(record.getDescription(), request.getDescription(), "Descriptions match");
     }
@@ -118,12 +119,14 @@ public class EventServiceTest {
         String eventId = randomUUID().toString();
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
+//        eventUserRepository.save(new UserRecord(user.getId(), user.getName(), user.getEmail()));
+
         EventRecord oldEventRecord = new EventRecord();
         oldEventRecord.setId(eventId);
         oldEventRecord.setName(mockNeat.strings().get());
         oldEventRecord.setDate(LocalDate.now().minusDays(2).toString());
         oldEventRecord.setUser(user);
-        oldEventRecord.setListOfUsersAttending(mock(List.class));
+        oldEventRecord.setListOfAttending(mock(List.class));
         oldEventRecord.setAddress(mockNeat.strings().get());
         oldEventRecord.setDescription(mockNeat.strings().get());
 
@@ -132,11 +135,11 @@ public class EventServiceTest {
 
         String newName = mockNeat.strings().get();
         String newDate = mockNeat.strings().get();
-        List<String> newListOfUsersAttending = mock(List.class);
+        List<String> newListOfAttending = mock(List.class);
         String newAddress = mockNeat.strings().get();
         String newDescription = mockNeat.strings().get();
 
-        eventService.updateEventById(eventId, newName, newDate, user, newListOfUsersAttending, newAddress, newDescription);
+        eventService.updateEventById(eventId, newName, newDate, user, newListOfAttending, newAddress, newDescription);
         verify(eventRepository).save(eventRecordCaptor.capture());
 
         EventRecord record = eventRecordCaptor.getValue();
@@ -145,7 +148,7 @@ public class EventServiceTest {
         Assertions.assertEquals(record.getId(), eventId, "The event id matches");
         Assertions.assertEquals(record.getName(), newName, "The event name matches");
         Assertions.assertEquals(record.getDate(), newDate, "The event date has been changed");
-        Assertions.assertEquals(record.getListOfUsersAttending(), newListOfUsersAttending, "Lists match");
+        Assertions.assertEquals(record.getListOfAttending(), newListOfAttending, "Lists match");
         Assertions.assertEquals(record.getAddress(), newAddress, "Both of the address matches");
         Assertions.assertEquals(record.getDescription(), newDescription, "The descriptions match");
     }
@@ -175,7 +178,7 @@ public class EventServiceTest {
         request.setName(eventName);
         request.setDate(LocalDate.now().toString());
         request.setUser(user);
-        request.setListOfUsersAttending(mock(List.class));
+        request.setListOfAttending(mock(List.class));
         request.setDescription(mockNeat.strings().get());
 
         EventResponse eventResponse = eventService.addNewEvent(request);

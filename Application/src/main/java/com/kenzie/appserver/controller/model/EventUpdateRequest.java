@@ -25,8 +25,8 @@ public class EventUpdateRequest {
     private User user;
 
     @NotEmpty
-    @JsonProperty("listOfUsersAttending")
-    private List<String> listOfUsersAttending;
+    @JsonProperty("listOfAttending")
+    private List<String> listOfAttending;
 
     @NotEmpty
     @JsonProperty("address")
@@ -38,12 +38,12 @@ public class EventUpdateRequest {
 
     public EventUpdateRequest(){}
 
-    public EventUpdateRequest(String name, String date, User user, List<String> getListOfUsersAttending,
+    public EventUpdateRequest(String name, String date, User user, List<String> getListOfAttending,
                               String address, String description){
         this.name = name;
         this.date = date;
         this.user = user;
-        this.listOfUsersAttending = getListOfUsersAttending;
+        this.listOfAttending = getListOfAttending;
         this.address = address;
         this.description = description;
     }
@@ -72,12 +72,12 @@ public class EventUpdateRequest {
         this.date = date;
     }
 
-    public List<String> getListOfUsersAttending() {
-        return listOfUsersAttending;
+    public List<String> getListOfAttending() {
+        return listOfAttending;
     }
 
-    public void setListOfUsersAttending(List<String> listOfUsersAttending) {
-        this.listOfUsersAttending = listOfUsersAttending;
+    public void setListOfAttending(List<String> listOfAttending) {
+        this.listOfAttending = listOfAttending;
     }
 
     public String getAddress() {
