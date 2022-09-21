@@ -45,7 +45,7 @@ public class EventService {
             EventRecord eventRecord = eventExists.get();
             eventRecord.setName(name);
             eventRecord.setDate(date);
-            eventRecord.setOrganizer(user);
+            eventRecord.setUser(user);
             eventRecord.setListOfUsersAttending(listOfUsers);
             eventRecord.setAddress(address);
             eventRecord.setDescription(description);
@@ -69,7 +69,7 @@ public class EventService {
                 eventRecord.setId(UUID.randomUUID().toString());
                 eventRecord.setName(createEventRequest.getName());
                 eventRecord.setDate(createEventRequest.getDate());
-                eventRecord.setOrganizer(createEventRequest.getUser());
+                eventRecord.setUser(createEventRequest.getUser());
                 eventRecord.setListOfUsersAttending(createEventRequest.getListOfUsersAttending());
                 eventRecord.setAddress(createEventRequest.getAddress());
                 eventRecord.setDescription(createEventRequest.getDescription());

@@ -49,7 +49,7 @@ public class EventRecord {
         return user;
     }
 
-    public void setOrganizer(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

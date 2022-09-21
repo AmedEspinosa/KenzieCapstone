@@ -1,0 +1,38 @@
+Resources:
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      "AttributeDefinitions":
+        - "AttributeName": "Id"
+          "AttributeType": "S"
+        - "AttributeName": "Name"
+          "AttributeType": "S"
+        - "AttributeName": "Date"
+          "AttributeType": "S"
+        - "AttributeName": "User"
+          "AttributeType": "S"
+        - "AttributeName": "ListOfUsersAttending"
+          "AttributeType": "S"
+        - "AttributeName": "Address"
+          "AttributeType": "S"
+        - "AttributeName": "Description"
+          "AttributeType": "S"
+      "KeySchema":
+        - "AttributeName": "Id"
+          "KeyType": "HASH"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      BillingMode: PAY_PER_REQUEST
+      TableName: "Events"
+      GlobalSecondaryIndexes:
+        - IndexName: "EventName"
+          KeySchema:
+            - AttributeName: "Name"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: ALL
+
+#   aws cloudformation create-stack --stack-name lambda-table --template-body file://LambdaExampleTable.yml --capabilities CAPABILITY_IAM
+
+#  aws cloudformation deploy --template-file /Users/bestjavaprogrammer/Curriculum/ata-repos/ata-capstone-project-bestjavaprogrammer/lambda-service-development.yml--stack-name capstone-project-bestjavaprogrammer-service-dev --capabilities CAPABILITY_NAMED_IAM
+#  aws cloudformation deploy --template-file /Users/bobbyandris/kenzie_backend_development/ata-capstone-project-andrisr/LambdaEventTable.yml--stack-name ata-capstone-project-andrisr-service-dev --capabilities CAPABILITY_NAMED_IAM

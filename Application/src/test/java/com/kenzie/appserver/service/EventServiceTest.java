@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.controller.model.CreateEventRequest;
+import com.kenzie.appserver.controller.model.CreateUserRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -53,7 +54,7 @@ public class EventServiceTest {
         EventRecord record = new EventRecord();
         record.setId(id);
         record.setName(mockNeat.strings().get());
-        record.setOrganizer(user);
+        record.setUser(user);
         record.setListOfUsersAttending(usersAttending);
         record.setAddress(mockNeat.strings().get());
         record.setDescription(mockNeat.strings().get());
@@ -121,24 +122,21 @@ public class EventServiceTest {
         oldEventRecord.setId(eventId);
         oldEventRecord.setName(mockNeat.strings().get());
         oldEventRecord.setDate(LocalDate.now().minusDays(2).toString());
-        oldEventRecord.setOrganizer(user);
+        oldEventRecord.setUser(user);
         oldEventRecord.setListOfUsersAttending(mock(List.class));
         oldEventRecord.setAddress(mockNeat.strings().get());
         oldEventRecord.setDescription(mockNeat.strings().get());
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEventRecord));
-
         ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
 
         String newName = mockNeat.strings().get();
         String newDate = mockNeat.strings().get();
-        User newUser = user;
         List<String> newListOfUsersAttending = mock(List.class);
         String newAddress = mockNeat.strings().get();
         String newDescription = mockNeat.strings().get();
-        // WHEN
-        eventService.updateEventById(eventId, newName, newDate, newUser, newListOfUsersAttending, newAddress, newDescription);
-        // THEN
+
+        eventService.updateEventById(eventId, newName, newDate, user, newListOfUsersAttending, newAddress, newDescription);
         verify(eventRepository).save(eventRecordCaptor.capture());
 
         EventRecord record = eventRecordCaptor.getValue();
@@ -165,6 +163,25 @@ public class EventServiceTest {
         } catch(MockitoAssertionError error) {
             throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
         }
+    }
+
+    @Test
+    void deleteEvent(){
+
+        String eventName = mockNeat.strings().get();
+        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+
+        CreateEventRequest request = new CreateEventRequest();
+        request.setName(eventName);
+        request.setDate(LocalDate.now().toString());
+        request.setUser(user);
+        request.setListOfUsersAttending(mock(List.class));
+        request.setDescription(mockNeat.strings().get());
+
+        EventResponse eventResponse = eventService.addNewEvent(request);
+
+        eventService.deleteEvent(eventResponse.getId());
+        verify(eventRepository).deleteById(eventResponse.getId());
     }
 
 }
