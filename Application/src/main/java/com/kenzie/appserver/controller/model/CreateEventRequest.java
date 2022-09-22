@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CreateEventRequest {
 
-    @NotEmpty
+
     @JsonProperty("id")
     private String id;
 
@@ -24,6 +24,7 @@ public class CreateEventRequest {
     @JsonProperty("user")
     private User user;
 
+    @NotEmpty
     @JsonProperty("listOfAttending")
     private List<String> listOfAttending;
 

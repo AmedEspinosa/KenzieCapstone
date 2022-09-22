@@ -27,10 +27,10 @@ public class EventQueryUtility {
                     .accept(MediaType.APPLICATION_JSON));
         }
 
-        public ResultActions getAllEvents() throws Exception {
-            return mvc.perform(get("/events/all")
-                    .accept(MediaType.APPLICATION_JSON));
-        }
+//        public ResultActions getAllEvents() throws Exception {
+//            return mvc.perform(get("/events/all")
+//                    .accept(MediaType.APPLICATION_JSON));
+//        }
 
         public ResultActions addEvent(CreateEventRequest createEventRequest) throws Exception {
             return mvc.perform(post("/events/")
@@ -40,14 +40,14 @@ public class EventQueryUtility {
         }
 
         public ResultActions updateEvent(EventUpdateRequest eventUpdateRequest) throws Exception {
-            return mvc.perform(put("/events/")
+            return mvc.perform(put("/events/{eventId}", eventUpdateRequest.getId())
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(mapper.writeValueAsString(eventUpdateRequest)));
         }
 
         public ResultActions deleteEvent(String eventId) throws Exception {
-            return mvc.perform(delete("/rsvp/{name}", eventId)
+            return mvc.perform(delete("/events/{eventId}", eventId)
                     .accept(MediaType.APPLICATION_JSON));
         }
     }

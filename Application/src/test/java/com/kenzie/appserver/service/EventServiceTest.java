@@ -3,6 +3,7 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.CreateUserRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
+import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
@@ -83,6 +84,7 @@ public class EventServiceTest {
 
         ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
         // WHEN
+        when(eventUserRepository.existsById(request.getUser().getId())).thenReturn(true);
         EventResponse eventResponse = eventService.addNewEvent(request);
         // THEN
         Assertions.assertNotNull(eventResponse);
@@ -119,8 +121,6 @@ public class EventServiceTest {
         String eventId = randomUUID().toString();
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
-//        eventUserRepository.save(new UserRecord(user.getId(), user.getName(), user.getEmail()));
-
         EventRecord oldEventRecord = new EventRecord();
         oldEventRecord.setId(eventId);
         oldEventRecord.setName(mockNeat.strings().get());
@@ -133,33 +133,37 @@ public class EventServiceTest {
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(oldEventRecord));
         ArgumentCaptor<EventRecord> eventRecordCaptor = ArgumentCaptor.forClass(EventRecord.class);
 
-        String newName = mockNeat.strings().get();
-        String newDate = mockNeat.strings().get();
-        List<String> newListOfAttending = mock(List.class);
-        String newAddress = mockNeat.strings().get();
-        String newDescription = mockNeat.strings().get();
+        EventUpdateRequest eventUpdateRequest = new EventUpdateRequest();
+        eventUpdateRequest.setId(oldEventRecord.getId());
+        eventUpdateRequest.setName(mockNeat.names().get());
+        eventUpdateRequest.setDate(LocalDate.now().toString());
+        eventUpdateRequest.setUser(oldEventRecord.getUser());
+        eventUpdateRequest.setListOfAttending(mock(List.class));
+        eventUpdateRequest.setAddress(mockNeat.addresses().get());
+        eventUpdateRequest.setDescription(mockNeat.departments().get());
 
-        eventService.updateEventById(eventId, newName, newDate, user, newListOfAttending, newAddress, newDescription);
+        eventService.updateEventById(eventUpdateRequest);
         verify(eventRepository).save(eventRecordCaptor.capture());
 
         EventRecord record = eventRecordCaptor.getValue();
 
         Assertions.assertNotNull(record, "The event record has been returned");
-        Assertions.assertEquals(record.getId(), eventId, "The event id matches");
-        Assertions.assertEquals(record.getName(), newName, "The event name matches");
-        Assertions.assertEquals(record.getDate(), newDate, "The event date has been changed");
-        Assertions.assertEquals(record.getListOfAttending(), newListOfAttending, "Lists match");
-        Assertions.assertEquals(record.getAddress(), newAddress, "Both of the address matches");
-        Assertions.assertEquals(record.getDescription(), newDescription, "The descriptions match");
+        Assertions.assertEquals(record.getId(), eventUpdateRequest.getId(), "The event id matches");
+        Assertions.assertEquals(record.getName(), eventUpdateRequest.getName(), "The event name matches");
+        Assertions.assertEquals(record.getDate(), eventUpdateRequest.getDate(), "The event date has been changed");
+        Assertions.assertEquals(record.getListOfAttending(), eventUpdateRequest.getListOfAttending(), "Lists match");
+        Assertions.assertEquals(record.getAddress(), eventUpdateRequest.getAddress(), "Both of the address matches");
+        Assertions.assertEquals(record.getDescription(), eventUpdateRequest.getDescription(), "The descriptions match");
     }
 
     @Test
     void updateEventById_IdIsNull_throws_responseStatusException() {
-        String eventID = null;
-        when(eventRepository.findById(eventID)).thenReturn(Optional.empty());
+        EventUpdateRequest eventUpdateRequest = new EventUpdateRequest();
+        eventUpdateRequest.setId(UUID.randomUUID().toString());
+
+        when(eventRepository.findById(eventUpdateRequest.getId())).thenReturn(Optional.empty());
         // WHEN
-        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.updateEventById(eventID, null,
-                                                null, null, null,null , null));
+        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.updateEventById(eventUpdateRequest));
         // THEN
         try {
             verify(eventRepository, never()).save(Matchers.any());
@@ -171,17 +175,18 @@ public class EventServiceTest {
     @Test
     void deleteEvent(){
 
-        String eventName = mockNeat.strings().get();
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         CreateEventRequest request = new CreateEventRequest();
-        request.setName(eventName);
+        request.setName(mockNeat.strings().get());
         request.setDate(LocalDate.now().toString());
         request.setUser(user);
         request.setListOfAttending(mock(List.class));
+        request.setAddress(mockNeat.addresses().get());
         request.setDescription(mockNeat.strings().get());
 
         EventResponse eventResponse = eventService.addNewEvent(request);
+        when(eventRepository.existsById(eventResponse.getId())).thenReturn(true);
 
         eventService.deleteEvent(eventResponse.getId());
         verify(eventRepository).deleteById(eventResponse.getId());
