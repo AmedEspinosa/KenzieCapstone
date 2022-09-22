@@ -38,8 +38,9 @@ public class EventUpdateRequest {
 
     public EventUpdateRequest(){}
 
-    public EventUpdateRequest(String name, String date, User user, List<String> getListOfAttending,
+    public EventUpdateRequest(String id, String name, String date, User user, List<String> getListOfAttending,
                               String address, String description){
+        this.id = id;
         this.name = name;
         this.date = date;
         this.user = user;
@@ -100,7 +101,7 @@ public class EventUpdateRequest {
         return user;
     }
 
-    public void setOrganizer(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

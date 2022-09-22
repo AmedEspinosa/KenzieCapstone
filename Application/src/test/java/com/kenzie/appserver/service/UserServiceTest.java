@@ -64,7 +64,7 @@ public class UserServiceTest {
     void createUser() {
 
        CreateUserRequest createUserRequest = new CreateUserRequest();
-       createUserRequest.setId(UUID.randomUUID().toString());
+//       createUserRequest.setId(UUID.randomUUID().toString());
        createUserRequest.setName(mockNeat.strings().get());
        createUserRequest.setEmail(UUID.randomUUID().toString());
 
@@ -73,7 +73,7 @@ public class UserServiceTest {
        UserResponse userResponse = userService.createUser(createUserRequest);
 
        Assertions.assertNotNull(userResponse);
-       Assertions.assertEquals(userResponse.getId(), createUserRequest.getId(), "user id matches");
+//       Assertions.assertEquals(userResponse.getId(), createUserRequest.getId(), "user id matches");
        Assertions.assertEquals(userResponse.getName(), createUserRequest.getName(), "user names matches");
        Assertions.assertEquals(userResponse.getEmail(), createUserRequest.getEmail(), "user email matches");
     }

@@ -3,11 +3,12 @@ package com.kenzie.appserver.repositories.model;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.kenzie.appserver.service.model.User;
 
 import java.util.List;
 
-@DynamoDBTable(tableName = "Events")
+@DynamoDBTable(tableName = "events")
 public class EventRecord {
     private String id;
     private String name;
@@ -17,7 +18,7 @@ public class EventRecord {
     private String address;
     private String description;
 
-    @DynamoDBHashKey(attributeName = "Id")
+    @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
     }
@@ -26,7 +27,7 @@ public class EventRecord {
         this.id = id;
     }
 
-    @DynamoDBAttribute(attributeName = "Name")
+    @DynamoDBAttribute(attributeName = "name")
     public String getName() {
         return name;
     }
@@ -35,7 +36,7 @@ public class EventRecord {
         this.name = name;
     }
 
-    @DynamoDBAttribute(attributeName = "Date")
+    @DynamoDBAttribute(attributeName = "date")
     public String getDate() {
         return date;
     }
@@ -44,16 +45,18 @@ public class EventRecord {
         this.date = date;
     }
 
-    @DynamoDBAttribute(attributeName = "User")
+    @DynamoDBTypeConverted(converter = UserTypeConverter.class)
+    @DynamoDBAttribute(attributeName = "user")
     public User getUser() {
         return user;
     }
 
+    @DynamoDBAttribute(attributeName = "user")
     public void setUser(User user) {
         this.user = user;
     }
 
-    @DynamoDBAttribute(attributeName = "ListOfAttending")
+    @DynamoDBAttribute(attributeName = "listOfAttending")
     public List<String> getListOfAttending() {
         return listOfAttending;
     }
@@ -62,7 +65,7 @@ public class EventRecord {
         this.listOfAttending = listOfAttending;
     }
 
-    @DynamoDBAttribute(attributeName = "Address")
+    @DynamoDBAttribute(attributeName = "address")
     public String getAddress() {
         return address;
     }
@@ -71,12 +74,18 @@ public class EventRecord {
         this.address = address;
     }
 
-    @DynamoDBAttribute(attributeName = "Description")
+    @DynamoDBAttribute(attributeName = "description")
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

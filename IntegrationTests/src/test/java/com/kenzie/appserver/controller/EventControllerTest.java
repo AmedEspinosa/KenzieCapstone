@@ -1,24 +1,23 @@
 package com.kenzie.appserver.controller;//package com.kenzie.appserver.controller;
 
 import com.kenzie.appserver.IntegrationTest;
-import com.kenzie.appserver.controller.model.CreateEventRequest;
-import com.kenzie.appserver.controller.model.EventUpdateRequest;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.service.EventService;
-import com.kenzie.appserver.service.model.Example;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.User;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.util.NestedServletException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,12 +32,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @IntegrationTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ExampleControllerTest {
+class EventControllerTest {
     @Autowired
     private MockMvc mvc;
 
     @Autowired
     EventService eventService;
+
+    @Autowired
+    UserService userService;
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
@@ -52,28 +54,31 @@ class ExampleControllerTest {
     @Test
     public void getEventById_validId_isSuccessful() throws Exception {
 
+        List<String> list = new ArrayList<>();
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+
         CreateEventRequest createEventRequest = new CreateEventRequest();
-        createEventRequest.setName(mockNeat.strings().get());
-        createEventRequest.setDate(mockNeat.strings().get());
-        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfAttending(mock(List.class));
-        createEventRequest.setAddress(mockNeat.strings().get());
+        createEventRequest.setName(mockNeat.names().first().get());
+        createEventRequest.setDate(LocalDate.now().toString());
+        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get()));
+        createEventRequest.setListOfAttending(list);
+        createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
-        eventQueryUtility.eventControllerClient.addEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
         // WHEN
-        eventQueryUtility.eventControllerClient.getEventById(createEventRequest.getId())
+        eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
                 // THEN
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id")
-                        .value(is(createEventRequest.getId())))
                 .andExpect(jsonPath("name")
                         .value(is(createEventRequest.getName())))
                 .andExpect(jsonPath("date")
                         .value(is(createEventRequest.getDate())))
-                .andExpect(jsonPath("user")
-                        .value(is(createEventRequest.getUser())))
+                .andExpect(jsonPath("$.user.name")
+                        .value(is(createEventRequest.getUser().getName())))
                 .andExpect(jsonPath("listOfAttending")
                         .value(is(createEventRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
@@ -86,33 +91,47 @@ class ExampleControllerTest {
     @Test
     public void addEvent_validRequest_isSuccessful() throws Exception {
 
+        List<String> list = new ArrayList<>();
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+
+//        User user = new User();
+//        CreateUserRequest createUserRequest = new CreateUserRequest();
+//        createUserRequest.setName(mockNeat.names().get());
+//        createUserRequest.setEmail(mockNeat.emails().get());
+//
+//        UserResponse userResponse = userService.createUser(createUserRequest);
+//
+//        user.setId(userResponse.getId());
+//        user.setName(userResponse.getName());
+//        user.setEmail(userResponse.getEmail());
+
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
-        createEventRequest.setName(mockNeat.strings().get());
-        createEventRequest.setDate(mockNeat.strings().get());
-        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfAttending(mock(List.class));
-        createEventRequest.setAddress(mockNeat.strings().get());
+        createEventRequest.setName(mockNeat.names().first().get());
+        createEventRequest.setDate(LocalDate.now().toString());
+        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get()));
+        createEventRequest.setListOfAttending(list);
+        createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
         // WHEN
         eventQueryUtility.eventControllerClient.addEvent(createEventRequest)
                 // THEN
-                .andExpect(jsonPath("id")
-                        .value(is(createEventRequest.getId())))
                 .andExpect(jsonPath("name")
                         .value(is(createEventRequest.getName())))
                 .andExpect(jsonPath("date")
                         .value(is(createEventRequest.getDate())))
-                .andExpect(jsonPath("user")
-                        .value(is(createEventRequest.getUser())))
+                .andExpect(jsonPath("$.user.name")
+                        .value(is(createEventRequest.getUser().getName())))
                 .andExpect(jsonPath("listOfAttending")
                         .value(is(createEventRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
                         .value(is(createEventRequest.getAddress())))
                 .andExpect(jsonPath("description")
                         .value(is(createEventRequest.getDescription())))
-                .andExpect(status().isOk());
+                .andExpect(status().is2xxSuccessful());
 
         eventQueryUtility.eventControllerClient.deleteEvent(createEventRequest.getId());
     }
@@ -120,28 +139,33 @@ class ExampleControllerTest {
     @Test
     public void updateEvent_validRequest_isSuccessful() throws Exception {
 
+        List<String> list = new ArrayList<>();
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
-        createEventRequest.setName(mockNeat.strings().get());
-        createEventRequest.setDate(mockNeat.strings().get());
-        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfAttending(mock(List.class));
-        createEventRequest.setAddress(mockNeat.strings().get());
+        createEventRequest.setName(mockNeat.names().first().get());
+        createEventRequest.setDate(LocalDate.now().toString());
+        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get()));
+        createEventRequest.setListOfAttending(list);
+        createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
-        eventQueryUtility.eventControllerClient.addEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
         // WHEN
         EventUpdateRequest updateRequest = new EventUpdateRequest();
-        updateRequest.setName(mockNeat.strings().get());
-        updateRequest.setDate(mockNeat.strings().get());
-        updateRequest.setListOfAttending(mock(List.class));
-        updateRequest.setAddress(mockNeat.strings().get());
+        updateRequest.setId(eventResponse.getId());
+        updateRequest.setName(mockNeat.names().first().get());
+        updateRequest.setDate(LocalDate.now().toString());
+        updateRequest.setUser(eventResponse.getUser());
+        updateRequest.setListOfAttending(list);
+        updateRequest.setAddress(mockNeat.addresses().get());
         updateRequest.setDescription(mockNeat.strings().get());
 
-        eventQueryUtility.eventControllerClient.updateEvent(updateRequest);
-
-        eventQueryUtility.eventControllerClient.getEventById(createEventRequest.getId())
+        eventQueryUtility.eventControllerClient.updateEvent(updateRequest)
                 // THEN
                 .andExpect(jsonPath("id")
                         .value(is(updateRequest.getId())))
@@ -149,8 +173,6 @@ class ExampleControllerTest {
                         .value(is(updateRequest.getName())))
                 .andExpect(jsonPath("date")
                         .value(is(updateRequest.getDate())))
-                .andExpect(jsonPath("user")
-                        .value(is(updateRequest.getUser())))
                 .andExpect(jsonPath("listOfAttending")
                         .value(is(updateRequest.getListOfAttending())))
                 .andExpect(jsonPath("address")
@@ -162,28 +184,31 @@ class ExampleControllerTest {
         eventQueryUtility.eventControllerClient.deleteEvent(createEventRequest.getId());
     }
 
-
     @Test
     public void deleteEvent_validId_isSuccessful() throws Exception {
+
+        List<String> list = new ArrayList<>();
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+        list.add(mockNeat.names().get());
+
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
-        createEventRequest.setName(mockNeat.strings().get());
-        createEventRequest.setDate(mockNeat.strings().get());
-        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get()));
-        createEventRequest.setListOfAttending(mock(List.class));
-        createEventRequest.setAddress(mockNeat.strings().get());
+        createEventRequest.setName(mockNeat.names().first().get());
+        createEventRequest.setDate(LocalDate.now().toString());
+        createEventRequest.setUser(new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get()));
+        createEventRequest.setListOfAttending(list);
+        createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
         // WHEN
-        eventQueryUtility.eventControllerClient.addEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
-        eventQueryUtility.eventControllerClient.deleteEvent(createEventRequest.getId())
-                // THEN
+       eventQueryUtility.eventControllerClient.deleteEvent(eventResponse.getId())
                 .andExpect(status().isOk());
 
-        assertThrows(NestedServletException.class, () -> {
-            eventQueryUtility.eventControllerClient.getEventById(createEventRequest.getId());
-        });
+        eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
+                .andExpect(status().isNotFound());
     }
 
 

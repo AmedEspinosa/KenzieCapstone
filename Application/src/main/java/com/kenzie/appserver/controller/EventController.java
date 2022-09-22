@@ -33,8 +33,8 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<EventResponse> addEvent(@RequestBody CreateEventRequest createEventRequest){
-        if (createEventRequest != null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Customer Name");
+        if (createEventRequest == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Event check request");
         }
         EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
@@ -42,16 +42,11 @@ public class EventController {
     }
 
     // What do we want to be available to be updated?
-    @PostMapping
+    @PutMapping("/{eventId}")
     public ResponseEntity<EventResponse> updateEvent(@RequestBody EventUpdateRequest eventUpdateRequest) {
 
-        EventResponse eventResponse = eventService.updateEventById(eventUpdateRequest.getId(),
-                                                               eventUpdateRequest.getName(),
-                                                               eventUpdateRequest.getDate(),
-                                                               eventUpdateRequest.getUser(),
-                                                               eventUpdateRequest.getListOfAttending(),
-                                                               eventUpdateRequest.getAddress(),
-                                                               eventUpdateRequest.getDescription());
+        EventResponse eventResponse = eventService.updateEventById(eventUpdateRequest);
+
         return ResponseEntity.ok(eventResponse);
     }
 

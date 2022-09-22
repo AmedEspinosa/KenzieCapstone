@@ -2,6 +2,7 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
+import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
@@ -32,34 +33,33 @@ public class EventService {
     }
 
     /**
-     *  Should we add check to see if Organizer is the one responsible for creating the updated event?
+     *
+     * @param eventUpdateRequest - checks to make sure that the user who has created the event is the
+     *                           only one able to make an update to that event.
      */
-    public EventResponse updateEventById(String id, String name, String date, User user, List<String> listOfUsers,
-                                         String address, String description){
+    public EventResponse updateEventById(EventUpdateRequest eventUpdateRequest){
 
-        Optional<EventRecord> eventExists = eventRepository.findById(id);
-        if (eventExists.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Customer Not Found");
+        Optional<EventRecord> event = eventRepository.findById(eventUpdateRequest.getId());
+        EventRecord eventRecord;
+        if (event.isPresent()){
+            if (event.get().getUser().getId().equals(eventUpdateRequest.getUser().getId())) {
+                eventRecord = event.get();
+                eventRecord.setId(eventUpdateRequest.getId());
+                eventRecord.setName(eventUpdateRequest.getName());
+                eventRecord.setDate(eventUpdateRequest.getDate());
+                eventRecord.setListOfAttending(eventUpdateRequest.getListOfAttending());
+                eventRecord.setAddress(eventUpdateRequest.getAddress());
+                eventRecord.setDescription(eventUpdateRequest.getDescription());
+                eventRepository.save(eventRecord);
+                return recordToResponse(eventRecord);
+            }
         }
-//        if (eventUserRepository.existsById(user.getId())){
-            EventRecord eventRecord = eventExists.get();
-            eventRecord.setName(name);
-            eventRecord.setDate(date);
-            eventRecord.setUser(user);
-            eventRecord.setListOfAttending(listOfUsers);
-            eventRecord.setAddress(address);
-            eventRecord.setDescription(description);
-            eventRepository.save(eventRecord);
-
-            return recordToResponse(eventRecord);
-//        } else {
-//        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Organizer");
-//        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User request.");
     }
 
     /**
-     *  Do we want to make a check, to make sure that the user(organizer) is registered
-     *  within the system? Would have to create a class of type Organizer that has the name/ id.
+     *  @param createEventRequest - checks to make sure that the user is a valid user before
+     *                            allowing Event to be created.
      */
     public EventResponse addNewEvent(CreateEventRequest createEventRequest){
 
@@ -75,15 +75,22 @@ public class EventService {
                 eventRecord.setAddress(createEventRequest.getAddress());
                 eventRecord.setDescription(createEventRequest.getDescription());
                 eventRepository.save(eventRecord);
+
+                return recordToResponse(eventRecord);
             }
 //        }
-        else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CreateEventRequest was either null or id was invalid");
-        }
-        return recordToResponse(eventRecord);
     }
 
-    public void deleteEvent(String eventId){ eventRepository.deleteById(eventId);}
+    public void deleteEvent(String eventId){
+        if (eventId.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is Empty");
+        }
+        if (!eventRepository.existsById(eventId)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id does not exist in the repository");
+        }
+            eventRepository.deleteById(eventId);
+    }
 
 
     public EventResponse recordToResponse(EventRecord eventRecord){

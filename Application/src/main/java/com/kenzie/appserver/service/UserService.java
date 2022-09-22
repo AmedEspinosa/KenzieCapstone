@@ -40,10 +40,11 @@ public class UserService {
             userRecord.setName(createUserRequest.getName());
             userRecord.setEmail(createUserRequest.getEmail());
             eventUserRepository.save(userRecord);
+
+            return recordToResponse(userRecord);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User Request");
         }
-        return recordToResponse(userRecord);
     }
 
     public void deleteUser(String userId){
