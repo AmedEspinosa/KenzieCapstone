@@ -22,7 +22,7 @@ public class EventResponse {
     private User user;
 
     @JsonProperty("listOfAttending")
-    private List<String> listOfAttending;
+    private List<User> listOfAttending;
 
     @JsonProperty("address")
     private String address;
@@ -62,11 +62,11 @@ public class EventResponse {
         this.user = user;
     }
 
-    public List<String> getListOfAttending() {
+    public List<User> getListOfAttending() {
         return listOfAttending;
     }
 
-    public void setListOfAttending(List<String> listOfAttending) {
+    public void setListOfAttending(List<User> listOfAttending) {
         this.listOfAttending = listOfAttending;
     }
 

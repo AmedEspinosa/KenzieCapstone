@@ -1,6 +1,5 @@
 package com.kenzie.appserver.service.model;
 
-import org.apache.catalina.User;
 
 import java.util.List;
 
@@ -9,11 +8,11 @@ public class Event {
     private String name;
     private String date;
     private User user;
-    private List<String> listOfUsersAttending;
+    private List<User> listOfUsersAttending;
     private String address;
     private String description;
 
-    public Event(String id, String name, String date, User user, List<String> listOfUsersAttending, String address, String description) {
+    public Event(String id, String name, String date, User user, List<User> listOfUsersAttending, String address, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -55,11 +54,11 @@ public class Event {
         this.user = user;
     }
 
-    public List<String> getListOfUsersAttending() {
+    public List<User> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
 
-    public void setListOfUsersAttending(List<String> listOfUsersAttending) {
+    public void setListOfUsersAttending(List<User> listOfUsersAttending) {
         this.listOfUsersAttending = listOfUsersAttending;
     }
 

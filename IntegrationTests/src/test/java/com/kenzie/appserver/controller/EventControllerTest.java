@@ -48,16 +48,20 @@ class EventControllerTest {
 
     private EventQueryUtility eventQueryUtility;
 
+    User user1 = new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get());
+    User user2 = new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get());
+    User user3 = new User(UUID.randomUUID().toString(), mockNeat.names().get(), mockNeat.emails().get());
+
     @BeforeAll
     public void setup(){ eventQueryUtility = new EventQueryUtility(mvc);}
 
     @Test
     public void getEventById_validId_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<User> list = new ArrayList<>();
+        list.add(user1);
+        list.add(user2);
+        list.add(user3);
 
         CreateEventRequest createEventRequest = new CreateEventRequest();
         createEventRequest.setName(mockNeat.names().first().get());
@@ -91,10 +95,10 @@ class EventControllerTest {
     @Test
     public void addEvent_validRequest_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<User> list = new ArrayList<>();
+        list.add(user1);
+        list.add(user2);
+        list.add(user3);
 
 //        User user = new User();
 //        CreateUserRequest createUserRequest = new CreateUserRequest();
@@ -139,10 +143,10 @@ class EventControllerTest {
     @Test
     public void updateEvent_validRequest_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<User> list = new ArrayList<>();
+        list.add(user1);
+        list.add(user2);
+        list.add(user3);
 
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
@@ -187,10 +191,10 @@ class EventControllerTest {
     @Test
     public void deleteEvent_validId_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<User> list = new ArrayList<>();
+        list.add(user1);
+        list.add(user2);
+        list.add(user3);
 
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();

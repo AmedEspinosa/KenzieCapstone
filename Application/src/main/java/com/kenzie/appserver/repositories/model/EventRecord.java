@@ -14,7 +14,7 @@ public class EventRecord {
     private String name;
     private String date;
     private User user;
-    private List<String> listOfAttending;
+    private List<User> listOfAttending;
     private String address;
     private String description;
 
@@ -57,11 +57,11 @@ public class EventRecord {
     }
 
     @DynamoDBAttribute(attributeName = "listOfAttending")
-    public List<String> getListOfAttending() {
+    public List<User> getListOfAttending() {
         return listOfAttending;
     }
 
-    public void setListOfAttending(List<String> listOfAttending) {
+    public void setListOfAttending(List<User> listOfAttending) {
         this.listOfAttending = listOfAttending;
     }
 
