@@ -2,6 +2,7 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.controller.model.CreateUserRequest;
 import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.UserUpdateRequest;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.UserRecord;
@@ -16,18 +17,16 @@ import java.util.UUID;
 @Service
 public class UserService {
     private EventRepository eventRepository;
-    private EventUserRepository eventUserRepository;
+    private final EventUserRepository eventUserRepository;
     private LambdaServiceClient lambdaServiceClient;
 
     public UserService(EventUserRepository eventUserRepository) {
-        this.eventRepository = eventRepository;
-        this.lambdaServiceClient = lambdaServiceClient;
         this.eventUserRepository = eventUserRepository;
     }
 
-    public UserResponse getUserById(String id){
+    public UserResponse getUserById(String userId){
 
-        Optional<UserRecord> userRecord = eventUserRepository.findById(id);
+        Optional<UserRecord> userRecord = eventUserRepository.findById(userId);
         return userRecord.map(this::recordToResponse).orElse(null);
     }
 
@@ -43,22 +42,28 @@ public class UserService {
 
             return recordToResponse(userRecord);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User Request");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid User Request, either name or email is absent");
         }
     }
 
-    public void deleteUser(String userId){
-        eventUserRepository.deleteById(userId);
+    public void deleteUser(String userid){
+        if (userid.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is Empty");
+        }
+        if (!eventUserRepository.existsById(userid)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id does not exist in the repository");
+        }
+        eventUserRepository.deleteById(userid);
     }
 
-    public UserResponse updateUser(String id, String name, String email){
-        Optional<UserRecord> userExists = eventUserRepository.findById(id);
+    public UserResponse updateUser(UserUpdateRequest userUpdateRequest){
+        Optional<UserRecord> userExists = eventUserRepository.findById(userUpdateRequest.getId());
         if (userExists.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Not Found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Not Found, does not exist in repository");
         }
         UserRecord userRecord = userExists.get();
-        userRecord.setName(name);
-        userRecord.setEmail(email);
+        userRecord.setName(userUpdateRequest.getName());
+        userRecord.setEmail(userUpdateRequest.getEmail());
         eventUserRepository.save(userRecord);
 
         return recordToResponse(userRecord);

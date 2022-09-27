@@ -31,25 +31,24 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> addNewUser(@RequestBody CreateUserRequest createUserRequest){
-        if (createUserRequest != null){
+        if (createUserRequest == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Customer Name");
         }
-        UserResponse userResponse = userService.createUser(new CreateUserRequest());
+        UserResponse userResponse = userService.createUser(createUserRequest);
 
         return ResponseEntity.created(URI.create("/user/" + userResponse.getName())).body(userResponse);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest userUpdateRequest) {
 
-        UserResponse userResponse = userService.updateUser(userUpdateRequest.getId(), userUpdateRequest.getName(),
-                                                           userUpdateRequest.getEmail());
+        UserResponse userResponse = userService.updateUser(userUpdateRequest);
 
         return ResponseEntity.ok(userResponse);
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity deleteUserById(@PathVariable("userId") String userId) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUserById(@PathVariable("id") String userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }

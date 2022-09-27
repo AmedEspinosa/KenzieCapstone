@@ -1,9 +1,6 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.controller.model.CreateEventRequest;
-import com.kenzie.appserver.controller.model.CreateUserRequest;
-import com.kenzie.appserver.controller.model.EventResponse;
-import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -92,7 +89,7 @@ public class UserServiceTest {
         when(eventUserRepository.findById(userRecord.getId())).thenReturn(Optional.of(userRecord));
         ArgumentCaptor<UserRecord> userRecordArgumentCaptor = ArgumentCaptor.forClass(UserRecord.class);
 
-        userService.updateUser(userRecord.getId(), newName, newEmail);
+        userService.updateUser(new UserUpdateRequest(userRecord.getId(), newName, newEmail));
 
         verify(eventUserRepository).save(userRecordArgumentCaptor.capture());
         UserRecord record = userRecordArgumentCaptor.getValue();
@@ -106,13 +103,24 @@ public class UserServiceTest {
     @Test
     void deleteUser() {
 
-    UserRecord userRecord = new UserRecord();
-    userRecord.setId(UUID.randomUUID().toString());
-    userRecord.setName(mockNeat.strings().get());
-    userRecord.setId(UUID.randomUUID().toString());
+//    UserRecord userRecord = new UserRecord();
+//    userRecord.setId(UUID.randomUUID().toString());
+//    userRecord.setName(mockNeat.strings().get());
+//    userRecord.setId(UUID.randomUUID().toString());
+//
+//    userService.deleteUser(userRecord.getId());
+//    verify(eventUserRepository).deleteById(userRecord.getId());
+//    }
 
-    userService.deleteUser(userRecord.getId());
-    verify(eventUserRepository).deleteById(userRecord.getId());
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setName(mockNeat.names().get());
+        createUserRequest.setEmail(mockNeat.emails().get());
+
+        UserResponse userResponse = userService.createUser(createUserRequest);
+        when(eventUserRepository.existsById(userResponse.getId())).thenReturn(true);
+
+        userService.deleteUser(userResponse.getId());
+        verify(eventUserRepository).deleteById(userResponse.getId());
     }
 
 
