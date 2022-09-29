@@ -1,6 +1,7 @@
 package com.kenzie.appserver.controller.model;//package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 
 import javax.validation.constraints.NotEmpty;
@@ -26,7 +27,7 @@ public class CreateEventRequest {
 
     @NotEmpty
     @JsonProperty("listOfAttending")
-    private List<User> listOfAttending;
+    private List<Customer> listOfAttending;
 
     @NotEmpty
     @JsonProperty("address")
@@ -39,7 +40,7 @@ public class CreateEventRequest {
 
     public CreateEventRequest(){}
 
-    public CreateEventRequest(String name, String date, User user, List<User> ListOfAttending,
+    public CreateEventRequest(String name, String date, User user, List<Customer> ListOfAttending,
                               String address, String description){
         this.name = name;
         this.date = date;
@@ -81,11 +82,11 @@ public class CreateEventRequest {
         this.user = user;
     }
 
-    public List<User> getListOfAttending() {
+    public List<Customer> getListOfAttending() {
         return listOfAttending;
     }
 
-    public void setListOfAttending(List<User> listOfAttending) {
+    public void setListOfAttending(List<Customer> listOfAttending) {
         this.listOfAttending = listOfAttending;
     }
 

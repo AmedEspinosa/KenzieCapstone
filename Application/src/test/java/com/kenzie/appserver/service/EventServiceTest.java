@@ -8,6 +8,7 @@ import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.model.UserRecord;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import net.andreinc.mockneat.MockNeat;
@@ -49,7 +50,7 @@ public class EventServiceTest {
     void getEventById() {
         // GIVEN
         String id = randomUUID().toString();
-        List<User> usersAttending = mock(List.class);
+        List<Customer> usersAttending = mock(List.class);
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         EventRecord record = new EventRecord();
@@ -201,12 +202,11 @@ public class EventServiceTest {
         Date dateOfToday = new Date();
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
-        User userA1 = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
-        User userA2 = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
-        User userA3 = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+        Customer userA1 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+        Customer userA2 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+        Customer userA3 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
-
-        List<User> listOfUsersAttending = new ArrayList<>();
+        List<Customer> listOfUsersAttending = new ArrayList<>();
         listOfUsersAttending.add(userA1);
         listOfUsersAttending.add(userA2);
         listOfUsersAttending.add(userA3);

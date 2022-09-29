@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class EventRecord {
     private String name;
     private String date;
     private User user;
-    private List<User> listOfAttending;
+    private List<Customer> listOfAttending;
     private String address;
     private String description;
 
@@ -57,11 +58,11 @@ public class EventRecord {
     }
 
     @DynamoDBAttribute(attributeName = "listOfAttending")
-    public List<User> getListOfAttending() {
+    public List<Customer> getListOfAttending() {
         return listOfAttending;
     }
 
-    public void setListOfAttending(List<User> listOfAttending) {
+    public void setListOfAttending(List<Customer> listOfAttending) {
         this.listOfAttending = listOfAttending;
     }
 

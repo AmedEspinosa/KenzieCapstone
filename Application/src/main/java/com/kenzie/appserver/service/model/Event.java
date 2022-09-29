@@ -8,11 +8,11 @@ public class Event {
     private String name;
     private String date;
     private User user;
-    private List<User> listOfUsersAttending;
+    private List<Customer> listOfUsersAttending;
     private String address;
     private String description;
 
-    public Event(String id, String name, String date, User user, List<User> listOfUsersAttending, String address, String description) {
+    public Event(String id, String name, String date, User user, List<Customer> listOfUsersAttending, String address, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -54,11 +54,11 @@ public class Event {
         this.user = user;
     }
 
-    public List<User> getListOfUsersAttending() {
+    public List<Customer> getListOfUsersAttending() {
         return listOfUsersAttending;
     }
 
-    public void setListOfUsersAttending(List<User> listOfUsersAttending) {
+    public void setListOfUsersAttending(List<Customer> listOfUsersAttending) {
         this.listOfUsersAttending = listOfUsersAttending;
     }
 
