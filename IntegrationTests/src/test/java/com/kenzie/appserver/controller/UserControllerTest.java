@@ -108,7 +108,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void deleteEvent_validId_isSuccessful() throws Exception {
+    public void deleteUser_validId_isSuccessful() throws Exception {
 
         // GIVEN
         CreateUserRequest createUserRequest = new CreateUserRequest();

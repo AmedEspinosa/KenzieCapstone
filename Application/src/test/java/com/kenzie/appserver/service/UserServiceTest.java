@@ -61,16 +61,17 @@ public class UserServiceTest {
     void createUser() {
 
        CreateUserRequest createUserRequest = new CreateUserRequest();
-//       createUserRequest.setId(UUID.randomUUID().toString());
        createUserRequest.setName(mockNeat.strings().get());
        createUserRequest.setEmail(UUID.randomUUID().toString());
 
        ArgumentCaptor<UserRecord> customerRecordCaptor = ArgumentCaptor.forClass(UserRecord.class);
-
        UserResponse userResponse = userService.createUser(createUserRequest);
 
+       when(eventUserRepository.existsById(userResponse.getId())).thenReturn(true);
+
+       verify(eventUserRepository).save(customerRecordCaptor.capture());
        Assertions.assertNotNull(userResponse);
-//       Assertions.assertEquals(userResponse.getId(), createUserRequest.getId(), "user id matches");
+       Assertions.assertEquals(userResponse.getId(), userResponse.getId(), "user id matches");
        Assertions.assertEquals(userResponse.getName(), createUserRequest.getName(), "user names matches");
        Assertions.assertEquals(userResponse.getEmail(), createUserRequest.getEmail(), "user email matches");
     }
@@ -102,15 +103,6 @@ public class UserServiceTest {
 
     @Test
     void deleteUser() {
-
-//    UserRecord userRecord = new UserRecord();
-//    userRecord.setId(UUID.randomUUID().toString());
-//    userRecord.setName(mockNeat.strings().get());
-//    userRecord.setId(UUID.randomUUID().toString());
-//
-//    userService.deleteUser(userRecord.getId());
-//    verify(eventUserRepository).deleteById(userRecord.getId());
-//    }
 
         CreateUserRequest createUserRequest = new CreateUserRequest();
         createUserRequest.setName(mockNeat.names().get());

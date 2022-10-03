@@ -20,7 +20,6 @@ public class UserUpdateRequest {
     @JsonProperty("email")
     private String email;
 
-
     public UserUpdateRequest(){}
 
     public UserUpdateRequest(String id, String name, String email){

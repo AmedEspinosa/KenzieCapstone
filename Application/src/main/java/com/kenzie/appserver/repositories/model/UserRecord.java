@@ -20,7 +20,8 @@ public class UserRecord {
         this.email = email;
     }
 
-    @DynamoDBAttribute(attributeName = "id")
+
+    @DynamoDBHashKey(attributeName = "id")
     public String getId() {
         return id;
     }
@@ -28,7 +29,7 @@ public class UserRecord {
         this.id = id;
     }
 
-    @DynamoDBHashKey(attributeName = "name")
+    @DynamoDBAttribute(attributeName = "name")
     public String getName() {
         return name;
     }

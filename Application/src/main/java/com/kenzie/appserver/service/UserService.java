@@ -16,8 +16,7 @@ import java.util.UUID;
 
 @Service
 public class UserService {
-    private EventRepository eventRepository;
-    private final EventUserRepository eventUserRepository;
+    private EventUserRepository eventUserRepository;
     private LambdaServiceClient lambdaServiceClient;
 
     public UserService(EventUserRepository eventUserRepository) {
