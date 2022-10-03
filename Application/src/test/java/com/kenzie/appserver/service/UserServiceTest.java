@@ -1,9 +1,6 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.controller.model.CreateEventRequest;
-import com.kenzie.appserver.controller.model.CreateUserRequest;
-import com.kenzie.appserver.controller.model.EventResponse;
-import com.kenzie.appserver.controller.model.UserResponse;
+import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
@@ -64,16 +61,17 @@ public class UserServiceTest {
     void createUser() {
 
        CreateUserRequest createUserRequest = new CreateUserRequest();
-//       createUserRequest.setId(UUID.randomUUID().toString());
        createUserRequest.setName(mockNeat.strings().get());
        createUserRequest.setEmail(UUID.randomUUID().toString());
 
        ArgumentCaptor<UserRecord> customerRecordCaptor = ArgumentCaptor.forClass(UserRecord.class);
-
        UserResponse userResponse = userService.createUser(createUserRequest);
 
+       when(eventUserRepository.existsById(userResponse.getId())).thenReturn(true);
+
+       verify(eventUserRepository).save(customerRecordCaptor.capture());
        Assertions.assertNotNull(userResponse);
-//       Assertions.assertEquals(userResponse.getId(), createUserRequest.getId(), "user id matches");
+       Assertions.assertEquals(userResponse.getId(), userResponse.getId(), "user id matches");
        Assertions.assertEquals(userResponse.getName(), createUserRequest.getName(), "user names matches");
        Assertions.assertEquals(userResponse.getEmail(), createUserRequest.getEmail(), "user email matches");
     }
@@ -92,7 +90,7 @@ public class UserServiceTest {
         when(eventUserRepository.findById(userRecord.getId())).thenReturn(Optional.of(userRecord));
         ArgumentCaptor<UserRecord> userRecordArgumentCaptor = ArgumentCaptor.forClass(UserRecord.class);
 
-        userService.updateUser(userRecord.getId(), newName, newEmail);
+        userService.updateUser(new UserUpdateRequest(userRecord.getId(), newName, newEmail));
 
         verify(eventUserRepository).save(userRecordArgumentCaptor.capture());
         UserRecord record = userRecordArgumentCaptor.getValue();
@@ -106,13 +104,15 @@ public class UserServiceTest {
     @Test
     void deleteUser() {
 
-    UserRecord userRecord = new UserRecord();
-    userRecord.setId(UUID.randomUUID().toString());
-    userRecord.setName(mockNeat.strings().get());
-    userRecord.setId(UUID.randomUUID().toString());
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setName(mockNeat.names().get());
+        createUserRequest.setEmail(mockNeat.emails().get());
 
-    userService.deleteUser(userRecord.getId());
-    verify(eventUserRepository).deleteById(userRecord.getId());
+        UserResponse userResponse = userService.createUser(createUserRequest);
+        when(eventUserRepository.existsById(userResponse.getId())).thenReturn(true);
+
+        userService.deleteUser(userResponse.getId());
+        verify(eventUserRepository).deleteById(userResponse.getId());
     }
 
 

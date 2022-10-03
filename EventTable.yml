@@ -33,4 +33,4 @@ Resources:
             ProjectionType: ALL
 
 #   aws cloudformation create-stack --stack-name lambda-table --template-body file://LambdaExampleTable.yml --capabilities CAPABILITY_IAM   // Example
-#   aws cloudformation create-stack --stack-name events --template-body file://LambdaEventTable.yml --capabilities CAPABILITY_IAM
+#   aws cloudformation create-stack --stack-name events --template-body file://EventTable.yml --capabilities CAPABILITY_IAM
