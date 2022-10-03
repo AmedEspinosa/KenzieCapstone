@@ -6,6 +6,7 @@ import com.kenzie.appserver.service.EventService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.service.UserService;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,16 +49,20 @@ class EventControllerTest {
 
     private EventQueryUtility eventQueryUtility;
 
+    Customer userA1 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+    Customer userA2 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+    Customer userA3 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+
     @BeforeAll
     public void setup(){ eventQueryUtility = new EventQueryUtility(mvc);}
 
     @Test
     public void getEventById_validId_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<Customer> list = new ArrayList<>();
+        list.add(userA1);
+        list.add(userA2);
+        list.add(userA3);
 
         CreateEventRequest createEventRequest = new CreateEventRequest();
         createEventRequest.setName(mockNeat.names().first().get());
@@ -91,10 +96,10 @@ class EventControllerTest {
     @Test
     public void addEvent_validRequest_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<Customer> list = new ArrayList<>();
+        list.add(userA1);
+        list.add(userA2);
+        list.add(userA3);
 
 //        User user = new User();
 //        CreateUserRequest createUserRequest = new CreateUserRequest();
@@ -139,10 +144,10 @@ class EventControllerTest {
     @Test
     public void updateEvent_validRequest_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<Customer> list = new ArrayList<>();
+        list.add(userA1);
+        list.add(userA2);
+        list.add(userA3);
 
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
@@ -187,10 +192,10 @@ class EventControllerTest {
     @Test
     public void deleteEvent_validId_isSuccessful() throws Exception {
 
-        List<String> list = new ArrayList<>();
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
-        list.add(mockNeat.names().get());
+        List<Customer> list = new ArrayList<>();
+        list.add(userA1);
+        list.add(userA2);
+        list.add(userA3);
 
         // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();

@@ -8,6 +8,7 @@ import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.repositories.model.UserRecord;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import net.andreinc.mockneat.MockNeat;
@@ -20,9 +21,8 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.UUID.randomUUID;
 import static org.mockito.Mockito.*;
@@ -50,7 +50,7 @@ public class EventServiceTest {
     void getEventById() {
         // GIVEN
         String id = randomUUID().toString();
-        List<String> usersAttending = mock(List.class);
+        List<Customer> usersAttending = mock(List.class);
         User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
 
         EventRecord record = new EventRecord();
@@ -190,6 +190,78 @@ public class EventServiceTest {
 
         eventService.deleteEvent(eventResponse.getId());
         verify(eventRepository).deleteById(eventResponse.getId());
+    }
+
+    /** ------------------------------------------------------------------------
+     *  eventService.getAllEvents
+     *  ------------------------------------------------------------------------ **/
+
+    @Test
+    void getAllEvents_Successful(){
+
+        Date dateOfToday = new Date();
+        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+
+        Customer userA1 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+        Customer userA2 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+        Customer userA3 = new Customer(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+
+        List<Customer> listOfUsersAttending = new ArrayList<>();
+        listOfUsersAttending.add(userA1);
+        listOfUsersAttending.add(userA2);
+        listOfUsersAttending.add(userA3);
+
+        //GIVEN
+        EventRecord event1 = new EventRecord();
+        event1.setId(randomUUID().toString());
+        event1.setName("Event 1");
+        event1.setDate(dateOfToday.toString());
+        event1.setUser(user);
+        event1.setListOfAttending(listOfUsersAttending);
+        event1.setAddress("Event Address");
+        event1.setDescription("Event Description");
+
+        EventRecord event2 = new EventRecord();
+        event1.setId(randomUUID().toString());
+        event1.setName("Event 2");
+        event1.setDate(dateOfToday.toString());
+        event1.setUser(user);
+        event1.setListOfAttending(listOfUsersAttending);
+        event1.setAddress("Event Address 2");
+        event1.setDescription("Event Description 2");
+
+        List<EventRecord> events = new ArrayList<>();
+        events.add(event1);
+        events.add(event2);
+
+        when(eventRepository.findAll()).thenReturn(events);
+
+        List<EventResponse> responses = eventService.getAllEvents();
+
+        Assertions.assertNotNull(responses, "The List of Events is returned");
+        Assertions.assertEquals(2, responses.size(), "There were two events returned");
+
+        for (EventResponse event : responses) {
+            if (event.getId() == event1.getId()) {
+                Assertions.assertEquals(event1.getId(), event.getId(), "The event id matches");
+                Assertions.assertEquals(event1.getName(), event.getName(), "The event name matches");
+                Assertions.assertEquals(event1.getDate(), event.getDate(), "The event date matches");
+                Assertions.assertEquals(event1.getUser(), event.getUser(), "The event user matches");
+                Assertions.assertEquals(event1.getListOfAttending(), event.getListOfAttending(), "The event list of users match");
+                Assertions.assertEquals(event1.getAddress(), event.getAddress(), "The event address matches");
+                Assertions.assertEquals(event1.getDescription(), event.getDescription(), "The event description matches");
+            } else if (event.getId() == event2.getId()) {
+                Assertions.assertEquals(event2.getId(), event.getId(), "The event id matches");
+                Assertions.assertEquals(event2.getName(), event.getName(), "The event name matches");
+                Assertions.assertEquals(event2.getDate(), event.getDate(), "The event date matches");
+                Assertions.assertEquals(event2.getListOfAttending(), event.getListOfAttending(), "The event list of users match");
+                Assertions.assertEquals(event2.getUser(), event.getUser(), "The event user matches");
+                Assertions.assertEquals(event2.getAddress(), event.getAddress(), "The event address matches");
+                Assertions.assertEquals(event2.getDescription(), event.getDescription(), "The event description matches");
+            } else {
+                Assertions.assertTrue(false, "EventResponse returned that was not in the records!");
+            }
+        }
     }
 
 }
