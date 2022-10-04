@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheStore;
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.CreateUserRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
@@ -32,6 +33,7 @@ public class EventServiceTest {
     private EventUserRepository eventUserRepository;
     private EventService eventService;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheStore cacheStore;
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
@@ -40,7 +42,8 @@ public class EventServiceTest {
         eventRepository = mock(EventRepository.class);
         eventUserRepository = mock(EventUserRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        eventService = new EventService(eventRepository, lambdaServiceClient, eventUserRepository);
+        cacheStore = mock(CacheStore.class);
+        eventService = new EventService(eventRepository, lambdaServiceClient, eventUserRepository, cacheStore);
     }
     /** ------------------------------------------------------------------------
      *  exampleService.findById
@@ -62,6 +65,7 @@ public class EventServiceTest {
         record.setDescription(mockNeat.strings().get());
         // WHEN
         when(eventRepository.findById(id)).thenReturn(Optional.of(record));
+        when(cacheStore.get(record.getId())).thenReturn(Optional.of(record));
         Optional<EventRecord> eventResponse = eventRepository.findById(id);
         // THEN
         Assertions.assertNotNull(eventResponse, "The event is returned");
