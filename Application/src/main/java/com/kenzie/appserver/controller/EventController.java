@@ -4,13 +4,16 @@ import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.service.EventService;
+import com.kenzie.appserver.service.model.Event;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/events")
@@ -54,6 +57,16 @@ public class EventController {
     public ResponseEntity deleteEventById(@PathVariable("eventId") String eventId) {
         eventService.deleteEvent(eventId);
         return ResponseEntity.ok().build();
+    }
+
+    // Get All Events
+
+    @GetMapping("/all")
+    public ResponseEntity<List<EventResponse>> getAllEvents() {
+
+        List<EventResponse> eventsResponses = eventService.getAllEvents();
+
+        return ResponseEntity.ok(eventsResponses);
     }
 
 }

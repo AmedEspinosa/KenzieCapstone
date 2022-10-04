@@ -27,10 +27,10 @@ public class EventQueryUtility {
                     .accept(MediaType.APPLICATION_JSON));
         }
 
-//        public ResultActions getAllEvents() throws Exception {
-//            return mvc.perform(get("/events/all")
-//                    .accept(MediaType.APPLICATION_JSON));
-//        }
+        public ResultActions getAllEvents() throws Exception {
+            return mvc.perform(get("/events/all")
+                    .accept(MediaType.APPLICATION_JSON));
+        }
 
         public ResultActions addEvent(CreateEventRequest createEventRequest) throws Exception {
             return mvc.perform(post("/events/")

@@ -6,13 +6,14 @@ import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
-import com.kenzie.appserver.service.model.User;
+import com.kenzie.appserver.service.model.Event;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -92,6 +93,24 @@ public class EventService {
             eventRepository.deleteById(eventId);
     }
 
+    public List<EventResponse> getAllEvents(){
+
+        Iterable<EventRecord> responseOfRecords = eventRepository.findAll();
+        List<Event> events = new ArrayList<>();
+
+        for(EventRecord record : responseOfRecords) {
+            events.add(new Event(record.getId(),
+                    record.getName(),
+                    record.getDate(),
+                    record.getUser(),
+                    record.getListOfAttending(),
+                    record.getAddress(),
+                    record.getDescription()));
+        }
+
+        return events.stream().map(this::eventToResponse).collect(Collectors.toList());
+    }
+
 
     public EventResponse recordToResponse(EventRecord eventRecord){
 
@@ -106,6 +125,23 @@ public class EventService {
         eventResponse.setListOfAttending(eventRecord.getListOfAttending());
         eventResponse.setAddress(eventRecord.getAddress());
         eventResponse.setDescription(eventRecord.getDescription());
+
+        return eventResponse;
+    }
+
+    public EventResponse eventToResponse(Event event){
+
+        if (event == null){
+            return null;
+        }
+        EventResponse eventResponse = new EventResponse();
+        eventResponse.setId(event.getId());
+        eventResponse.setName(event.getName());
+        eventResponse.setDate(event.getDate());
+        eventResponse.setUser(event.getUser());
+        eventResponse.setListOfAttending(event.getListOfUsersAttending());
+        eventResponse.setAddress(event.getAddress());
+        eventResponse.setDescription(event.getDescription());
 
         return eventResponse;
     }
