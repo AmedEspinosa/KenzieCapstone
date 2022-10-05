@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheStore;
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
 import com.kenzie.appserver.controller.model.EventUpdateRequest;
@@ -20,17 +21,25 @@ public class EventService {
     private EventRepository eventRepository;
     private EventUserRepository eventUserRepository;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheStore cache;
 
-    public EventService(EventRepository eventRepository, LambdaServiceClient lambdaServiceClient, EventUserRepository eventUserRepository) {
+    public EventService(EventRepository eventRepository, LambdaServiceClient lambdaServiceClient, EventUserRepository eventUserRepository, CacheStore cache) {
         this.eventRepository = eventRepository;
         this.lambdaServiceClient = lambdaServiceClient;
         this.eventUserRepository = eventUserRepository;
+        this.cache = cache;
     }
 
     public EventResponse getEventById(String id){
 
         Optional<EventRecord> record = eventRepository.findById(id);
-        return record.map(this::recordToResponse).orElse(null);
+
+        EventResponse recordToResponses = record.map(this::recordToResponse)
+                                                .orElse(null);
+        if(record.isPresent()){
+            cache.add(record.get().getId(), record);
+        }
+        return recordToResponses;
     }
 
     /**
@@ -52,6 +61,8 @@ public class EventService {
                 eventRecord.setAddress(eventUpdateRequest.getAddress());
                 eventRecord.setDescription(eventUpdateRequest.getDescription());
                 eventRepository.save(eventRecord);
+                cache.evict(eventRecord.getId());
+
                 return recordToResponse(eventRecord);
             }
         }
@@ -91,6 +102,7 @@ public class EventService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id does not exist in the repository");
         }
             eventRepository.deleteById(eventId);
+            cache.evict(eventId);
     }
 
     public List<EventResponse> getAllEvents(){

@@ -1,5 +1,6 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.config.CacheStore;
 import com.kenzie.appserver.controller.model.CreateEventRequest;
 import com.kenzie.appserver.controller.model.CreateUserRequest;
 import com.kenzie.appserver.controller.model.EventResponse;
@@ -32,6 +33,7 @@ public class EventServiceTest {
     private EventUserRepository eventUserRepository;
     private EventService eventService;
     private LambdaServiceClient lambdaServiceClient;
+    private CacheStore cacheStore;
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
@@ -40,12 +42,12 @@ public class EventServiceTest {
         eventRepository = mock(EventRepository.class);
         eventUserRepository = mock(EventUserRepository.class);
         lambdaServiceClient = mock(LambdaServiceClient.class);
-        eventService = new EventService(eventRepository, lambdaServiceClient, eventUserRepository);
+        cacheStore = mock(CacheStore.class);
+        eventService = new EventService(eventRepository, lambdaServiceClient, eventUserRepository, cacheStore);
     }
     /** ------------------------------------------------------------------------
-     *  exampleService.findById
+     *  eventService.getEventById
      *  ------------------------------------------------------------------------ **/
-
     @Test
     void getEventById() {
         // GIVEN
@@ -62,13 +64,16 @@ public class EventServiceTest {
         record.setDescription(mockNeat.strings().get());
         // WHEN
         when(eventRepository.findById(id)).thenReturn(Optional.of(record));
+        when(cacheStore.get(record.getId())).thenReturn(Optional.of(record));
         Optional<EventRecord> eventResponse = eventRepository.findById(id);
         // THEN
         Assertions.assertNotNull(eventResponse, "The event is returned");
         Assertions.assertEquals(record.getId(), eventResponse.get().getId(), "The id matches");
         Assertions.assertEquals(record.getName(), eventResponse.get().getName(), "The name matches");
     }
-
+    /** ------------------------------------------------------------------------
+     *  eventService.addNewEvent
+     *  ------------------------------------------------------------------------ **/
     @Test
     void addNewEvent() {
 
@@ -102,7 +107,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void addNewEvent_CreateEventRequest_IsNull_Throws_Exception() {
+    void addNewEvent_createEventRequest_isNull_throws_exception() {
 
         CreateEventRequest createEventRequest = null;
         // WHEN
@@ -114,7 +119,9 @@ public class EventServiceTest {
             throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
         }
     }
-
+    /** ------------------------------------------------------------------------
+     *  eventService.updateEventById
+     *  ------------------------------------------------------------------------ **/
     @Test
     void updateEventById() {
 
@@ -157,7 +164,7 @@ public class EventServiceTest {
     }
 
     @Test
-    void updateEventById_IdIsNull_throws_responseStatusException() {
+    void updateEventById_idIsNull_throws_responseStatusException() {
         EventUpdateRequest eventUpdateRequest = new EventUpdateRequest();
         eventUpdateRequest.setId(UUID.randomUUID().toString());
 
@@ -171,7 +178,9 @@ public class EventServiceTest {
             throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
         }
     }
-
+    /** ------------------------------------------------------------------------
+     *  eventService.deleteEvent
+     *  ------------------------------------------------------------------------ **/
     @Test
     void deleteEvent(){
 
@@ -190,6 +199,36 @@ public class EventServiceTest {
 
         eventService.deleteEvent(eventResponse.getId());
         verify(eventRepository).deleteById(eventResponse.getId());
+    }
+
+    @Test
+    void deleteEvent_eventId_isEmpty_throws_exception() {
+
+        String eventId = "";
+        when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.deleteEvent(eventId));
+        // THEN
+        try {
+            verify(eventRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
+    }
+
+    @Test
+    void deleteEvent_eventId_doesNotExist_throws_exception() {
+
+        String eventId = randomUUID().toString();
+        when(eventRepository.existsById(eventId)).thenReturn(false);
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> eventService.deleteEvent(eventId));
+        // THEN
+        try {
+            verify(eventRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
     }
 
     /** ------------------------------------------------------------------------

@@ -20,6 +20,7 @@ import org.springframework.web.util.NestedServletException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
@@ -84,13 +85,21 @@ class EventControllerTest {
                         .value(is(createEventRequest.getDate())))
                 .andExpect(jsonPath("$.user.name")
                         .value(is(createEventRequest.getUser().getName())))
-                .andExpect(jsonPath("listOfAttending")
-                        .value(is(createEventRequest.getListOfAttending())))
+                .andExpect(jsonPath("$.listOfAttending[0].id")
+                        .value(is(createEventRequest.getListOfAttending().get(0).getId()))) //What's expected
                 .andExpect(jsonPath("address")
                         .value(is(createEventRequest.getAddress())))
                 .andExpect(jsonPath("description")
                         .value(is(createEventRequest.getDescription())))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getEventById_eventDoesNotExist() throws Exception {
+
+        String id = UUID.randomUUID().toString();
+        eventQueryUtility.eventControllerClient.getEventById(id)
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -101,18 +110,6 @@ class EventControllerTest {
         list.add(userA2);
         list.add(userA3);
 
-//        User user = new User();
-//        CreateUserRequest createUserRequest = new CreateUserRequest();
-//        createUserRequest.setName(mockNeat.names().get());
-//        createUserRequest.setEmail(mockNeat.emails().get());
-//
-//        UserResponse userResponse = userService.createUser(createUserRequest);
-//
-//        user.setId(userResponse.getId());
-//        user.setName(userResponse.getName());
-//        user.setEmail(userResponse.getEmail());
-
-        // GIVEN
         CreateEventRequest createEventRequest = new CreateEventRequest();
         createEventRequest.setName(mockNeat.names().first().get());
         createEventRequest.setDate(LocalDate.now().toString());
@@ -130,8 +127,8 @@ class EventControllerTest {
                         .value(is(createEventRequest.getDate())))
                 .andExpect(jsonPath("$.user.name")
                         .value(is(createEventRequest.getUser().getName())))
-                .andExpect(jsonPath("listOfAttending")
-                        .value(is(createEventRequest.getListOfAttending())))
+                .andExpect(jsonPath("$.listOfAttending[0].id")
+                        .value(is(createEventRequest.getListOfAttending().get(0).getId())))
                 .andExpect(jsonPath("address")
                         .value(is(createEventRequest.getAddress())))
                 .andExpect(jsonPath("description")
@@ -139,6 +136,14 @@ class EventControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
         eventQueryUtility.eventControllerClient.deleteEvent(createEventRequest.getId());
+    }
+
+    @Test
+    public void addEvent_eventDoesNotExist() throws Exception {
+
+        CreateEventRequest createEventRequest = null;
+        eventQueryUtility.eventControllerClient.addEvent(createEventRequest)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -178,8 +183,8 @@ class EventControllerTest {
                         .value(is(updateRequest.getName())))
                 .andExpect(jsonPath("date")
                         .value(is(updateRequest.getDate())))
-                .andExpect(jsonPath("listOfAttending")
-                        .value(is(updateRequest.getListOfAttending())))
+                .andExpect(jsonPath("$.listOfAttending[0].id")
+                        .value(is(updateRequest.getListOfAttending().get(0).getId())))
                 .andExpect(jsonPath("address")
                         .value(is(updateRequest.getAddress())))
                 .andExpect(jsonPath("description")
@@ -215,6 +220,4 @@ class EventControllerTest {
         eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
                 .andExpect(status().isNotFound());
     }
-
-
 }

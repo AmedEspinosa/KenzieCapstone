@@ -58,6 +58,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("email")
                         .value(is(userResponse.getEmail())))
                 .andExpect(status().isOk());
+
+        userQueryUtility.userControllerClient.deleteUser(userResponse.getId());
     }
 
     @Test
@@ -77,7 +79,7 @@ class UserControllerTest {
                         .value(is(createUserRequest.getEmail())))
                 .andExpect(status().is2xxSuccessful());
 
-//        userQueryUtility.userControllerClient.deleteUser(userResponse.getId());
+        userQueryUtility.userControllerClient.deleteUser(userResponse.getId());
     }
 
     @Test
@@ -104,7 +106,7 @@ class UserControllerTest {
                         .value(is(userUpdateRequest.getEmail())))
                 .andExpect(status().isOk());
 
-//        userQueryUtility.userControllerClient.deleteUser(userUpdateRequest.getId());
+        userQueryUtility.userControllerClient.deleteUser(userUpdateRequest.getId());
     }
 
     @Test
