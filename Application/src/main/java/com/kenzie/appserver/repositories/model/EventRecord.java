@@ -57,11 +57,12 @@ public class EventRecord {
         this.user = user;
     }
 
+    @DynamoDBTypeConverted(converter = CustomerTypeConverter.class)
     @DynamoDBAttribute(attributeName = "listOfAttending")
     public List<Customer> getListOfAttending() {
         return listOfAttending;
     }
-
+    @DynamoDBAttribute(attributeName = "listOfAttending")
     public void setListOfAttending(List<Customer> listOfAttending) {
         this.listOfAttending = listOfAttending;
     }

@@ -36,9 +36,8 @@ public class UserServiceTest {
         userService = new UserService(eventUserRepository);
     }
     /** ------------------------------------------------------------------------
-     *  exampleService.findById
+     *  UserService.getUserById
      *  ------------------------------------------------------------------------ **/
-
     @Test
     void getUserById() {
 
@@ -56,7 +55,9 @@ public class UserServiceTest {
         Assertions.assertEquals(userResponse.getName(), userRecord.getName(), "Name matches");
         Assertions.assertEquals(userResponse.getEmail(), userRecord.getEmail(), "Email matches");
     }
-
+    /** ------------------------------------------------------------------------
+     *  UserService.createUser
+     *  ------------------------------------------------------------------------ **/
     @Test
     void createUser() {
 
@@ -76,6 +77,41 @@ public class UserServiceTest {
        Assertions.assertEquals(userResponse.getEmail(), createUserRequest.getEmail(), "user email matches");
     }
 
+    @Test
+    void createUser_createEventRequest_nameIsNull_throws_exception() {
+
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setName(null);
+        createUserRequest.setEmail(mockNeat.emails().get());
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.createUser(createUserRequest));
+        // THEN
+        try {
+            verify(eventUserRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the username is null. - " + error);
+        }
+    }
+
+    @Test
+    void createUser_createEventRequest_emailIsNull_throws_exception() {
+
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setName(mockNeat.names().get());
+        createUserRequest.setEmail(null);
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.createUser(createUserRequest));
+        // THEN
+        try {
+            verify(eventUserRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the email is null. - " + error);
+        }
+    }
+
+    /** ------------------------------------------------------------------------
+     *  UserService.updateUser
+     *  ------------------------------------------------------------------------ **/
     @Test
     void updateUser() {
 
@@ -102,6 +138,24 @@ public class UserServiceTest {
     }
 
     @Test
+    void updateUser_userRecord_doesNotExist_throws_exception() {
+
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+        userUpdateRequest.setId(randomUUID().toString());
+        // WHEN
+        when(eventUserRepository.findById(userUpdateRequest.getId())).thenReturn(Optional.empty());
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.updateUser(userUpdateRequest));
+        // THEN
+        try {
+            verify(eventUserRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the username is null. - " + error);
+        }
+    }
+    /** ------------------------------------------------------------------------
+     *  UserService.deleteUser
+     *  ------------------------------------------------------------------------ **/
+    @Test
     void deleteUser() {
 
         CreateUserRequest createUserRequest = new CreateUserRequest();
@@ -113,6 +167,36 @@ public class UserServiceTest {
 
         userService.deleteUser(userResponse.getId());
         verify(eventUserRepository).deleteById(userResponse.getId());
+    }
+
+    @Test
+    void deleteUser_userId_IsEmpty_throws_exception() {
+
+        String eventId = "";
+        when(eventUserRepository.findById(eventId)).thenReturn(Optional.empty());
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.deleteUser(eventId));
+        // THEN
+        try {
+            verify(eventUserRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
+    }
+
+    @Test
+    void deleteUser_userId_doesNotExist_throws_exception() {
+
+        String eventId = randomUUID().toString();
+        when(eventUserRepository.existsById(eventId)).thenReturn(false);
+        // WHEN
+        Assertions.assertThrows(ResponseStatusException.class, () -> userService.deleteUser(eventId));
+        // THEN
+        try {
+            verify(eventUserRepository, never()).save(Matchers.any());
+        } catch(MockitoAssertionError error) {
+            throw new MockitoAssertionError("There should not be a call to .save() if the event is not found in the database. - " + error);
+        }
     }
 
 
