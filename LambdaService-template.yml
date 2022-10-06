@@ -10,9 +10,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
-      Handler: com.kenzie.capstone.service.lambda.GetExampleData
+      Handler: com.kenzie.capstone.service.lambda.GetEventById
       Runtime: java11
-      Description: Get Example Data for given id
+      Description: Get Event for given id
       MemorySize: 512
       Timeout: 240
       # Function's execution role
