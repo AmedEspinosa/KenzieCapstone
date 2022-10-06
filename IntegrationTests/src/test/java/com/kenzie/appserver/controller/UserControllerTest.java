@@ -6,11 +6,14 @@ import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.User;
 import net.andreinc.mockneat.MockNeat;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.exceptions.base.MockitoAssertionError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,6 +68,14 @@ class UserControllerTest {
     }
 
     @Test
+    void getUserById_userResponse_isNull_throws_exception() throws Exception{
+
+        String id = UUID.randomUUID().toString();
+        userQueryUtility.userControllerClient.getUserById(id)
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void createUser_validRequest_isSuccessful() throws Exception {
 
         CreateUserRequest createUserRequest = new CreateUserRequest();
@@ -80,6 +93,14 @@ class UserControllerTest {
                 .andExpect(status().is2xxSuccessful());
 
         userQueryUtility.userControllerClient.deleteUser(userResponse.getId());
+    }
+
+    @Test
+    public void addNewUser_userRequestDoesNotExist() throws Exception {
+
+        CreateUserRequest createUserRequest = null;
+        userQueryUtility.userControllerClient.addNewUser(createUserRequest)
+                .andExpect(status().isBadRequest());
     }
 
     @Test

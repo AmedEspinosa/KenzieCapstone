@@ -92,6 +92,8 @@ class EventControllerTest {
                 .andExpect(jsonPath("description")
                         .value(is(createEventRequest.getDescription())))
                 .andExpect(status().isOk());
+        eventQueryUtility.eventControllerClient.deleteEvent(eventResponse.getId());
+
     }
 
     @Test
