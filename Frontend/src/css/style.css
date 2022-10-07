@@ -6,43 +6,33 @@
 }
 
 .background {
-    background-color: #c0ffd5;
+    background-color: #eaeded;
+    margin: 0;
+    counter-reset: section;
 }
 
 .header {
     /* Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
     color: var(--secondary-color);
-    display: block;
-    height: 70px;
-    width: auto;
-    margin: 0 auto;
-
-
-}
-
-.links {
-    font-size: 35px;
-    text-align: end;
-
+    padding: 0 20px;
 }
 
 .header_home {
     font-size: 36px;
     line-height: 40px;
-    text-align: end;
+    height: 100px;
     text-decoration: none;
-    color: var(--primary-color);
+    color: var(--secondary-color);
 }
 
-
-.paragraphOne {
-    white-space: pre-wrap;
-    font-size: 30px;
-    align-content: center;
-    font-style: italic;
-
-
+.header_nav_link {
+    margin-left: 20px;
+    vertical-align: top;
+    line-height: 40px;
 }
 
 .about {
@@ -97,19 +87,3 @@
 .state.active {
     display: block;
 }
-
-.card-content {
-    align-content: center;
-    font-size: 35px;
-
-}
-
-.card {
-    font-size: 35px;
-    align-content: center;
-}
-
-
-
-
-
