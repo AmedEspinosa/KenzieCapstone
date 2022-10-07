@@ -1,89 +1,98 @@
-:root {
-    /* css variables: https://developer.mozilla.org/en-US/docs/Web/CSS/var */
-    --primary-color: #131921;
-    --secondary-color: #fff;
-    --error-color: rgba(194, 0, 0, 0.71);
-}
-
-.background {
-    background-color: #eaeded;
+body{
     margin: 0;
-    counter-reset: section;
+    padding: 0;
+    /* background:purple; */
+    /* background-size: ; */
+    /* background-size: cover; */
+    /* background-position center; */
+    font-family: "Josefin Sans";
 }
 
-.header {
-    /* Flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    padding: 0 20px;
+.login_shell{
+    margin: auto;
+    padding: 30px 60px 20px 70px;
+
+    width: 460px;
+    height: 480px;
+    /* background-color: transparent; */
+    color: #F27A24;
+
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: 2px solid #0197f6 ;
+    outline: 4px solid #F27A24;
+    /* color:#0197f6; */
 }
 
-.header_home {
-    font-size: 36px;
-    line-height: 40px;
-    height: 100px;
-    text-decoration: none;
-    color: var(--secondary-color);
-}
+.login_shell_forget_password{
+    margin: auto;
+    padding: 30px 60px 20px 70px;
 
-.header_nav_link {
-    margin-left: 20px;
-    vertical-align: top;
-    line-height: 40px;
-}
-
-.about {
-    margin-left: 20px;
-}
-
-.button, button {
-    background: #aed9ff;
-    padding: 3px;
-    border-radius: 3px;
-    text-decoration: none;
+    width: 440px;
+    height: 320px;
+    background-color: transparent;
     color: black;
-    border: 1px solid black;
-    cursor: pointer;
+
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: 2px solid #0197f6 ;
+    outline: 4px solid #F27A24;
+
+    /* color:#0197f6; */
 }
 
-.button:hover, button:hover {
-    background: #9cc3e4;
+.login_shell_createAccount{
+    margin: auto;
+    padding: 30px 60px 20px 70px;
+
+    width: 450px;
+    height: 500px;
+    background-color: transparent;
+    color: rgb(250, 12, 12);
+
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: 2px solid #0197f6 ;
+    outline: 4px solid #F27A24;
+
+    /* color:#0197f6; */
 }
 
-.card {
-    color: var(--primary-color);
-    background-color: var(--secondary-color);
-    margin: 20px;
-    padding: 10px 20px;
+.user_icon_forgot_password{
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    position: absolute;
+    top: -29.5%;
+    left: 50%;
+    left: calc(50% - 50px);
 }
 
-.validated-field:invalid {
-    outline: 2px solid var(--error-color);
-}
-.validated-field:focus:invalid {
-    color: var(--error-color);
-}
-
-.card-content {
-    max-width: 500px;
-}
-
-.card-content .form-field {
-    display: flex;
-    flex-direction: column;
+.user_icon{
+    width: 120px;
+    height: auto;
+    border-radius: 50%;
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    left: calc(50% - 50px);
 }
 
-#concert-list li {
-    margin-bottom: 1rem;
-}
-
-.state {
-    display: none;
-}
-
-.state.active {
-    display: block;
+h1[id="login"]{
+    font-family: sans-serif;
+    color: #f9fafa;
+    font-size: 40px;
+    text-align: center;
 }
