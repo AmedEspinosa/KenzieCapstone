@@ -1,7 +1,6 @@
 package com.kenzie.capstone.service;
 
 import com.kenzie.capstone.service.dao.EventDao;
-import com.kenzie.capstone.service.dao.ExampleDao;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
 import com.kenzie.capstone.service.model.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -27,14 +25,11 @@ class LambdaServiceTest {
     /** ------------------------------------------------------------------------
      *  expenseService.getExpenseById
      *  ------------------------------------------------------------------------ **/
-
-    private ExampleDao exampleDao;
     private EventDao eventDao;
     private LambdaService lambdaService;
 
     @BeforeAll
     void setup() {
-        this.exampleDao = mock(ExampleDao.class);
         this.eventDao = mock(EventDao.class);
         this.lambdaService = new LambdaService(eventDao);
     }

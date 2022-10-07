@@ -8,8 +8,6 @@ import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
 import com.kenzie.capstone.service.model.EventRecord;
-import com.kenzie.capstone.service.model.ExampleRecord;
-import jdk.jfr.Event;
 
 import java.util.List;
 
