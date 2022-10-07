@@ -9,6 +9,7 @@ import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.CreateEventRequestData;
 import com.kenzie.capstone.service.model.EventResponseData;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -77,6 +78,8 @@ public class EventService {
      *                            allowing Event to be created.
      */
     public EventResponse addNewEvent(CreateEventRequest createEventRequest){
+
+       // EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), createEventRequest.getUser(), createEventRequest.getListOfAttending(), createEventRequest.getAddress(), createEventRequest.getDescription()));
 
         EventRecord eventRecord = new EventRecord();
 
