@@ -2,6 +2,7 @@ package com.kenzie.capstone.service;
 
 import com.kenzie.capstone.service.dao.EventDao;
 import com.kenzie.capstone.service.dao.ExampleDao;
+import com.kenzie.capstone.service.exceptions.InvalidDataException;
 import com.kenzie.capstone.service.model.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -38,57 +38,8 @@ class LambdaServiceTest {
         this.lambdaService = new LambdaService(eventDao);
     }
 
-//    @Test
-//    void setDataTest() {
-//        ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
-//        ArgumentCaptor<String> dataCaptor = ArgumentCaptor.forClass(String.class);
-//
-//        // GIVEN
-//        String data = "somedata";
-//
-//        // WHEN
-//        ExampleData response = this.lambdaService.setExampleData(data);
-//
-//        // THEN
-//        verify(exampleDao, times(1)).setExampleData(idCaptor.capture(), dataCaptor.capture());
-//
-//        assertNotNull(idCaptor.getValue(), "An ID is generated");
-//        assertEquals(data, dataCaptor.getValue(), "The data is saved");
-//
-//        assertNotNull(response, "A response is returned");
-//        assertEquals(idCaptor.getValue(), response.getId(), "The response id should match");
-//        assertEquals(data, response.getData(), "The response data should match");
-//    }
-//
-//    @Test
-//    void getDataTest() {
-//        ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
-//
-//        // GIVEN
-//        String id = "fakeid";
-//        String data = "somedata";
-//        ExampleRecord record = new ExampleRecord();
-//        record.setId(id);
-//        record.setData(data);
-//
-//
-//        when(exampleDao.getExampleData(id)).thenReturn(Arrays.asList(record));
-//
-//        // WHEN
-//        ExampleData response = this.lambdaService.getExampleData(id);
-//
-//        // THEN
-//        verify(exampleDao, times(1)).getExampleData(idCaptor.capture());
-//
-//        assertEquals(id, idCaptor.getValue(), "The correct id is used");
-//
-//        assertNotNull(response, "A response is returned");
-//        assertEquals(id, response.getId(), "The response id should match");
-//        assertEquals(data, response.getData(), "The response data should match");
-//    }
-
     @Test
-    void getEventById() {
+    void getEventById_Successful() {
         ArgumentCaptor<String> idCaptor = ArgumentCaptor.forClass(String.class);
 
         // GIVEN
@@ -121,10 +72,56 @@ class LambdaServiceTest {
 
         assertNotNull(response, "A response is returned");
         assertEquals(id, response.getId(), "The response id should match");
-//        assertEquals(data, response.getData(), "The response data should match");
+        assertEquals(name, response.getName(), "The response name should match");
+        assertEquals(today.toString(), response.getDate(), "The response date should match");
+        assertEquals(user, response.getUser(), "The response user should match");
+
     }
 
 
     // Write additional tests here
 
+    @Test
+    void addEventTest_Successful() {
+        // GIVEN
+        String id = "Event Id";
+        String name = "Event Name";
+        Date today = new Date();
+        User user = new User("User Id", "User Name", "User Email");
+        List<Customer> listOfAttending = new ArrayList<Customer>();
+        Customer customer = new Customer("Customer Id", "Customer Name", "Customer Email");
+        listOfAttending.add(customer);
+        CreateEventRequestData request = new CreateEventRequestData();
+        request.setId(id);
+        request.setName(name);
+        request.setDate(today.toString());
+        request.setUser(user);
+        request.setListOfAttending(listOfAttending);
+        request.setAddress("Fake Address");
+        request.setDescription("Add Event Description Test");
+
+        // WHEN
+        EventResponseData response = this.lambdaService.addEvent(request);
+
+        // THEN
+        ArgumentCaptor<EventRecord> eventRecordArgumentCaptor = ArgumentCaptor.forClass(EventRecord.class);
+        verify(eventDao).postNewEvent(eventRecordArgumentCaptor.capture());
+        EventRecord record = eventRecordArgumentCaptor.getValue();
+
+        assertEquals(id, record.getId(), "The record id should match");
+        assertEquals(name, record.getName(), "The record name should match");
+        assertEquals(today.toString(), record.getDate(), "The record date should match");
+        assertEquals(user, record.getUser(), "The record user should match");
+
+        assertEquals(id, response.getId(), "The response id should match");
+        assertEquals(name, response.getName(), "The response name should match");
+        assertEquals(today.toString(), response.getDate(), "The response date should match");
+        assertEquals(user, response.getUser(), "The response user should match");
+    }
+
+    @Test
+    void addEventTest_null_request_throws_InvalidDataException() {
+        // GIVEN / WHEN / THEN
+        assertThrows(InvalidDataException.class, ()->this.lambdaService.addEvent(null));
+    }
 }

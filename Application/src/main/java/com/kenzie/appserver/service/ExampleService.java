@@ -18,19 +18,19 @@ public class ExampleService {
         this.lambdaServiceClient = lambdaServiceClient;
     }
 
-    public Example findById(String id) {
-
-        // Example getting data from the lambda
-        ExampleData dataFromLambda = lambdaServiceClient.getExampleData(id);
-
-        // Example getting data from the local repository
-        Example dataFromDynamo = exampleRepository
-                .findById(id)
-                .map(example -> new Example(example.getId(), example.getName()))
-                .orElse(null);
-
-        return dataFromDynamo;
-    }
+//    public Example findById(String id) {
+//
+//        // Example getting data from the lambda
+//        ExampleData dataFromLambda = lambdaServiceClient.getExampleData(id);
+//
+//        // Example getting data from the local repository
+//        Example dataFromDynamo = exampleRepository
+//                .findById(id)
+//                .map(example -> new Example(example.getId(), example.getName()))
+//                .orElse(null);
+//
+//        return dataFromDynamo;
+//    }
 
 //    public Example addNewExample(String name) {
 //        // Example sending data to the lambda

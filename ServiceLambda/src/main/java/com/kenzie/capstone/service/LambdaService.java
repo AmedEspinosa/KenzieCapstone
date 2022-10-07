@@ -1,11 +1,10 @@
 package com.kenzie.capstone.service;
 
+import com.kenzie.capstone.service.converter.EventConverter;
 import com.kenzie.capstone.service.dao.EventDao;
-import com.kenzie.capstone.service.model.EventRecord;
-import com.kenzie.capstone.service.model.EventResponseData;
-import com.kenzie.capstone.service.model.ExampleData;
+import com.kenzie.capstone.service.exceptions.InvalidDataException;
+import com.kenzie.capstone.service.model.*;
 import com.kenzie.capstone.service.dao.ExampleDao;
-import com.kenzie.capstone.service.model.ExampleRecord;
 
 import javax.inject.Inject;
 
@@ -41,6 +40,11 @@ public class LambdaService {
         return new ExampleData(id, data);
     }
 
+    public ExampleData postNewEvent(String data) {
+        String id = UUID.randomUUID().toString();
+        ExampleRecord record = exampleDao.setExampleData(id, data);
+        return new ExampleData(id, data);
+    }
 
     public EventResponseData getEventById(String id){
         List<EventRecord> eventResponses = eventDao.getEventById(id);
@@ -49,4 +53,15 @@ public class LambdaService {
         }
         return null;
     }
+
+    // this is called from the lambda in ServiceLambda
+    public EventResponseData addEvent(CreateEventRequestData event) {
+        if (event == null) {
+            throw new InvalidDataException("Request must contain a valid event");
+        }
+        EventRecord record = EventConverter.fromRequestToRecord(event);
+        eventDao.postNewEvent(record);
+        return EventConverter.fromRecordToResponse(record);
+    }
+
 }
