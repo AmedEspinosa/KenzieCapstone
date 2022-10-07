@@ -9,6 +9,7 @@ import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.EventResponseData;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,6 +32,8 @@ public class EventService {
     }
 
     public EventResponse getEventById(String id){
+
+        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
 
         Optional<EventRecord> record = eventRepository.findById(id);
 
