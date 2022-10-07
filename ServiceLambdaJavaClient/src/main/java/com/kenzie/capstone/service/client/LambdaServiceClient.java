@@ -21,30 +21,6 @@ public class LambdaServiceClient {
         this.mapper = new ObjectMapper();
     }
 
-    public ExampleData getExampleData(String id) {
-        EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.getEndpoint(GET_EVENT_BY_ID_ENDPOINT.replace("{id}", id));
-        ExampleData exampleData;
-        try {
-            exampleData = mapper.readValue(response, ExampleData.class);
-        } catch (Exception e) {
-            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
-        }
-        return exampleData;
-    }
-
-    public ExampleData setExampleData(String data) {
-        EndpointUtility endpointUtility = new EndpointUtility();
-        String response = endpointUtility.postEndpoint(POST_EVENT_ENDPOINT, data);
-        ExampleData exampleData;
-        try {
-            exampleData = mapper.readValue(response, ExampleData.class);
-        } catch (Exception e) {
-            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
-        }
-        return exampleData;
-    }
-
     public EventResponseData getEventById(String id) {
         EndpointUtility endpointUtility = new EndpointUtility();
         String response = endpointUtility.getEndpoint(GET_EVENT_BY_ID_ENDPOINT.replace("{id}", id));
