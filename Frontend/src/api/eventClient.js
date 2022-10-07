@@ -1,14 +1,7 @@
 import BaseClass from "../util/baseClass";
 import axios from 'axios'
 
-/**
- * Client to call the MusicPlaylistService.
- *
- * This could be a great place to explore Mixins. Currently the client is being loaded multiple times on each page,
- * which we could avoid using inheritance or Mixins.
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins
- * https://javascript.info/mixins
- */
+
 export default class EventClient extends BaseClass {
 
     constructor(props = {}){
@@ -49,14 +42,14 @@ export default class EventClient extends BaseClass {
         }
     }
 
-    async addEvent(id, name, date, user, listOfUsers, address, description, errorCallback) {
+    async addEvent(id, name, date, user, listOfAttending, address, description, errorCallback) {
         try {
             const response = await this.client.post(`events`, {
                 id: id,
                 name: name,
                 date: date,
                 user: user,
-                listOfUsers: listOfUsers,
+                listOfAttending: listOfAttending,
                 address: address,
                 description: description
             });
@@ -66,14 +59,14 @@ export default class EventClient extends BaseClass {
         }
     }
 
-    async updateEvent(id, name, date, user, listOfUsers, address, description, errorCallback) {
+    async updateEvent(id, name, date, user, listOfAttending, address, description, errorCallback) {
         try {
             const response = await this.client.put(`events`, {
                 id: id,
                 name: name,
                 date: date,
                 user: user,
-                listOfUsers: listOfUsers,
+                listOfUsers: listOfAttending,
                 address: address,
                 description: description
             });
