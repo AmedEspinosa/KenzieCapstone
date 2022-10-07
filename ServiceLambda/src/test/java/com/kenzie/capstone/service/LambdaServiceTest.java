@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -123,5 +124,45 @@ class LambdaServiceTest {
     void addEventTest_null_request_throws_InvalidDataException() {
         // GIVEN / WHEN / THEN
         assertThrows(InvalidDataException.class, ()->this.lambdaService.addEvent(null));
+    }
+
+    @Test
+    void getAllEvents_Successful() {
+        //GIVEN
+
+        List<EventRecord> rootList = new ArrayList<>();
+        String id = "Event Id";
+        String name = "Event Name";
+        Date today = new Date();
+        User user = new User("User Id", "User Name", "User Email");
+        List<Customer> listOfAttending = new ArrayList<Customer>();
+        Customer customer = new Customer("Customer Id", "Customer Name", "Customer Email");
+        listOfAttending.add(customer);
+        String address = "Fake Address";
+        String description = "Add Event Description Test";
+
+        EventRecord record1 = new EventRecord();
+        record1.setId(id);
+        record1.setName(name);
+        record1.setDate(today.toString());
+        record1.setUser(user);
+        record1.setListOfAttending(listOfAttending);
+        record1.setAddress(address);
+        record1.setDescription(description);
+        rootList.add(record1);
+
+        when(eventDao.getAllEvents()).thenReturn(rootList);
+
+        //WHEN
+        List<Event> allEvents = lambdaService.getAllEvents();
+
+        List<Event> expected = new ArrayList<>();
+        expected.add(new Event(id, name, today.toString(), user, listOfAttending, address, description));
+
+        assertEquals(1, allEvents.size());
+        for (int i = 0; i < 1; i++) {
+            assertEquals(allEvents.get(i).getName(), expected.get(i).getName());
+            assertEquals(allEvents.get(i).getId(), expected.get(i).getId());
+        }
     }
 }

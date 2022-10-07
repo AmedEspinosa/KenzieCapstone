@@ -1,6 +1,7 @@
 package com.kenzie.capstone.service.converter;
 
 import com.kenzie.capstone.service.model.CreateEventRequestData;
+import com.kenzie.capstone.service.model.Event;
 import com.kenzie.capstone.service.model.EventRecord;
 import com.kenzie.capstone.service.model.EventResponseData;
 
@@ -28,5 +29,17 @@ public class EventConverter {
         response.setListOfAttending(record.getListOfAttending());
         response.setDescription(record.getDescription());
         return response;
+    }
+
+    public static Event fromRecordToEvent(EventRecord record) {
+        Event event = new Event();
+        event.setId(record.getId());
+        event.setName(record.getName());
+        event.setDate(record.getDate());
+        event.setUser(record.getUser());
+        event.setAddress(record.getAddress());
+        event.setListOfUsersAttending(record.getListOfAttending());
+        event.setDescription(record.getDescription());
+        return event;
     }
 }
