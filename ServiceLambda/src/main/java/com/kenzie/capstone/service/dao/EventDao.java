@@ -3,6 +3,7 @@ package com.kenzie.capstone.service.dao;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
@@ -42,4 +43,11 @@ public class EventDao {
         return record;
     }
 
+
+    public List<EventRecord> getAllEvents() {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("attribute_not_exists(id)");
+
+        return mapper.scan(EventRecord.class, scanExpression);
+    }
 }

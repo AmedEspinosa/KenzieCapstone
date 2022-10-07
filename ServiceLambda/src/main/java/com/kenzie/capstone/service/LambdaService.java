@@ -4,46 +4,19 @@ import com.kenzie.capstone.service.converter.EventConverter;
 import com.kenzie.capstone.service.dao.EventDao;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
 import com.kenzie.capstone.service.model.*;
-import com.kenzie.capstone.service.dao.ExampleDao;
 
 import javax.inject.Inject;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class LambdaService {
 
-    private ExampleDao exampleDao;
     private EventDao eventDao;
-
-//    @Inject
-//    public LambdaService(ExampleDao exampleDao) {
-//        this.exampleDao = exampleDao;
-//    }
 
     @Inject
     public LambdaService(EventDao eventDao){
         this.eventDao = eventDao;
-    }
-
-    public ExampleData getExampleData(String id) {
-        List<ExampleRecord> records = exampleDao.getExampleData(id);
-        if (records.size() > 0) {
-            return new ExampleData(records.get(0).getId(), records.get(0).getData());
-        }
-        return null;
-    }
-
-    public ExampleData setExampleData(String data) {
-        String id = UUID.randomUUID().toString();
-        ExampleRecord record = exampleDao.setExampleData(id, data);
-        return new ExampleData(id, data);
-    }
-
-    public ExampleData postNewEvent(String data) {
-        String id = UUID.randomUUID().toString();
-        ExampleRecord record = exampleDao.setExampleData(id, data);
-        return new ExampleData(id, data);
     }
 
     public EventResponseData getEventById(String id){
@@ -62,6 +35,12 @@ public class LambdaService {
         EventRecord record = EventConverter.fromRequestToRecord(event);
         eventDao.postNewEvent(record);
         return EventConverter.fromRecordToResponse(record);
+    }
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents().stream()
+                .map(EventConverter::fromRecordToEvent)
+                .collect(Collectors.toList());
     }
 
 }
