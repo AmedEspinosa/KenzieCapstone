@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>home_page</title>
     <link rel="stylesheet" type="text/css" href="css/home_page.css">
+    <link rel="stylesheet" type="text/css" href="css/search_and_login_landing_page.css">
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -23,7 +25,7 @@
         </li>
         <br>
         <li>
-            <a href="calender.html">
+            <a href="calendar.html">
                 <span class="icon"><i class='bx bx-calendar' ></i></i></span>
                 <span class="title">Events</span>
             </a>
@@ -45,6 +47,23 @@
     </ul>
 </div>
 
+<div class="get_event">
+    <form class="form_2" id="get_event_form">
+        <h1 id="get_event" style="color: #fdfbfa; font-size: xxx-large"> Find Event </h1>
+        <br><br>
+        <div class="row">
+            <div class="input_group">
+                <input type="text" id="name2" required>
+                <label for="name2">Name of Event</label>
+            </div>
+            <div class="input_group">
+                <input type="text" id="id2" required>
+                <label for="id2">Event id</label>
+            </div>
+        </div>
+        <button type="submit">Find Event </button>
+    </form>
+</div>
 
 
 </body>
