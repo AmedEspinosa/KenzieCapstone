@@ -65,7 +65,7 @@ public class EventServiceTest {
         // WHEN
         when(eventRepository.findById(id)).thenReturn(Optional.of(record));
         when(cacheStore.get(record.getId())).thenReturn(Optional.of(record));
-        Optional<EventRecord> eventResponse = eventRepository.findById(id);
+        Optional<EventResponse> eventResponse = Optional.ofNullable(eventService.getEventById(record.getId()));
         // THEN
         Assertions.assertNotNull(eventResponse, "The event is returned");
         Assertions.assertEquals(record.getId(), eventResponse.get().getId(), "The id matches");
