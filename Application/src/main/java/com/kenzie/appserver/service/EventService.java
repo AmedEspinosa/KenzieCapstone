@@ -48,6 +48,7 @@ public class EventService {
         return recordToResponses;
     }
 
+
 //    public EventResponse getEventById(String id){
 //
 //        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
