@@ -1,46 +1,23 @@
 package com.kenzie.capstone.service;
 
+import com.kenzie.capstone.service.converter.EventConverter;
 import com.kenzie.capstone.service.dao.EventDao;
-import com.kenzie.capstone.service.model.EventRecord;
-import com.kenzie.capstone.service.model.EventResponseData;
-import com.kenzie.capstone.service.model.ExampleData;
-import com.kenzie.capstone.service.dao.ExampleDao;
-import com.kenzie.capstone.service.model.ExampleRecord;
+import com.kenzie.capstone.service.exceptions.InvalidDataException;
+import com.kenzie.capstone.service.model.*;
 
 import javax.inject.Inject;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class LambdaService {
 
-    private ExampleDao exampleDao;
     private EventDao eventDao;
-
-//    @Inject
-//    public LambdaService(ExampleDao exampleDao) {
-//        this.exampleDao = exampleDao;
-//    }
 
     @Inject
     public LambdaService(EventDao eventDao){
         this.eventDao = eventDao;
     }
-
-    public ExampleData getExampleData(String id) {
-        List<ExampleRecord> records = exampleDao.getExampleData(id);
-        if (records.size() > 0) {
-            return new ExampleData(records.get(0).getId(), records.get(0).getData());
-        }
-        return null;
-    }
-
-    public ExampleData setExampleData(String data) {
-        String id = UUID.randomUUID().toString();
-        ExampleRecord record = exampleDao.setExampleData(id, data);
-        return new ExampleData(id, data);
-    }
-
 
     public EventResponseData getEventById(String id){
         List<EventRecord> eventResponses = eventDao.getEventById(id);
@@ -49,4 +26,21 @@ public class LambdaService {
         }
         return null;
     }
+
+    // this is called from the lambda in ServiceLambda
+    public EventResponseData addEvent(CreateEventRequestData event) {
+        if (event == null) {
+            throw new InvalidDataException("Request must contain a valid event");
+        }
+        EventRecord record = EventConverter.fromRequestToRecord(event);
+        eventDao.postNewEvent(record);
+        return EventConverter.fromRecordToResponse(record);
+    }
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents().stream()
+                .map(EventConverter::fromRecordToEvent)
+                .collect(Collectors.toList());
+    }
+
 }

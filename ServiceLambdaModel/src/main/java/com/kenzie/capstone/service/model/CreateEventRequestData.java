@@ -1,8 +1,10 @@
 package com.kenzie.capstone.service.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-public class EventResponseData {
+public class CreateEventRequestData {
     private String id;
     private String name;
     private String date;
@@ -11,14 +13,15 @@ public class EventResponseData {
     private String address;
     private String description;
 
-    public EventResponseData(){};
+    public CreateEventRequestData(){};
 
-    public EventResponseData(String id, String name, String date, User user, List<Customer> listOfAttending, String address, String description){
+    public CreateEventRequestData(String id, String name, String date, User user, List<Customer> ListOfAttending,
+                              String address, String description){
         this.id = id;
         this.name = name;
         this.date = date;
         this.user = user;
-        this.listOfAttending = listOfAttending;
+        this.listOfAttending = ListOfAttending;
         this.address = address;
         this.description = description;
     }

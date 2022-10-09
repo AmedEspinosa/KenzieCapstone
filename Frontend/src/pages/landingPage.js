@@ -5,13 +5,18 @@ import eventClient from "../api/eventClient";
 class LandingPage extends BaseClass {
     constructor() {
         super();
+
         this.bindClassMethods(['onCreateEvent', 'onUpdateEvent', 'onDeleteEvent', 'onGet'], this);
+
+        this.bindClassMethods(['onCreateEvent', 'onUpdateEvent', 'onDeleteEvent'], this);
+
         this.dataStore = new DataStore();
     }
 
     async onCreateEvent(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
+
 
         let name = document.getElementById("name").value;
         let date = document.getElementById("date").value;
@@ -29,11 +34,14 @@ class LandingPage extends BaseClass {
             this.errorHandler("Error creating! Try again...")
         }
 
+
+
     }
 
     async onUpdateEvent(event) {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
+
 
         let id = document.getElementById("id3").value;
         let name = document.getElementById("name3").value;
@@ -52,10 +60,12 @@ class LandingPage extends BaseClass {
         } else{
             this.errorHandler("No event found with given ID!");
         }
+
     }
 
     async onDeleteEvent(event) {
         event.preventDefault();
+
 
         let id = document.getElementById("id4").value;
         this.dataStore.set("event", null);
@@ -90,6 +100,11 @@ class LandingPage extends BaseClass {
 
     async mount() {
         document.getElementById("create_event_form").addEventListener('submit', this.onCreate);
+
+    }
+
+    async mount() {
+
         this.event = new eventClient();
     }
 }

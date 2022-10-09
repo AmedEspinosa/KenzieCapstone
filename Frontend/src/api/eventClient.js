@@ -33,7 +33,7 @@ export default class EventClient extends BaseClass {
         }
     }
 
-    async getAllEvents(attending, errorCallback) {
+    async getAllEvents(errorCallback) {
         try {
             const response = await this.client.get(`/events/all`);
             return response.data;
@@ -42,10 +42,10 @@ export default class EventClient extends BaseClass {
         }
     }
 
-    async addEvent(id, name, date, user, listOfAttending, address, description, errorCallback) {
+    async addEvent(name, date, user, listOfAttending, address, description, errorCallback) {
         try {
             const response = await this.client.post(`events`, {
-                id: id,
+                // id: id,
                 name: name,
                 date: date,
                 user: user,

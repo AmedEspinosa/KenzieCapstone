@@ -2,23 +2,23 @@ package com.kenzie.capstone.service.model;
 
 import java.util.List;
 
-public class EventResponseData {
+public class Event {
     private String id;
     private String name;
     private String date;
     private User user;
-    private List<Customer> listOfAttending;
+    private List<Customer> listOfUsersAttending;
     private String address;
     private String description;
 
-    public EventResponseData(){};
+    public Event(){};
 
-    public EventResponseData(String id, String name, String date, User user, List<Customer> listOfAttending, String address, String description){
+    public Event(String id, String name, String date, User user, List<Customer> listOfUsersAttending, String address, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.user = user;
-        this.listOfAttending = listOfAttending;
+        this.listOfUsersAttending = listOfUsersAttending;
         this.address = address;
         this.description = description;
     }
@@ -55,12 +55,12 @@ public class EventResponseData {
         this.user = user;
     }
 
-    public List<Customer> getListOfAttending() {
-        return listOfAttending;
+    public List<Customer> getListOfUsersAttending() {
+        return listOfUsersAttending;
     }
 
-    public void setListOfAttending(List<Customer> listOfAttending) {
-        this.listOfAttending = listOfAttending;
+    public void setListOfUsersAttending(List<Customer> listOfUsersAttending) {
+        this.listOfUsersAttending = listOfUsersAttending;
     }
 
     public String getAddress() {
@@ -78,4 +78,5 @@ public class EventResponseData {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

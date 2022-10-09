@@ -53,13 +53,8 @@ body {
     background: #3b0445;
     transition: 0.5s;
     overflow: hidden;
-    /* border-right: 10px solid #808000;
-    border-right: 8px solid #0061A6;
-    border-right: 6px solid #CC9900;
-    border-right: 4px solid #249CF2; */
     border-right: 6px solid #F27A24;
     outline: 4px solid #249CF2;
-
 }
 
 .nav_bar:hover{
@@ -67,9 +62,10 @@ body {
 }
 
 .nav_bar ul {
+    display: inline-block;
     position: absolute;
-    /* top: 0;
-    left: 0; */
+    top: 0;
+    left: 0;
     width: 100%;
 }
 

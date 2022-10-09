@@ -7,9 +7,12 @@ import com.kenzie.appserver.controller.model.EventUpdateRequest;
 import com.kenzie.appserver.repositories.EventUserRepository;
 import com.kenzie.appserver.repositories.model.EventRecord;
 import com.kenzie.appserver.repositories.EventRepository;
+import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.Event;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.model.CreateEventRequestData;
 import com.kenzie.capstone.service.model.EventResponseData;
+import com.kenzie.appserver.service.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,7 +36,7 @@ public class EventService {
 
     public EventResponse getEventById(String id){
 
-        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
+        //EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
 
         Optional<EventRecord> record = eventRepository.findById(id);
 
@@ -44,6 +47,27 @@ public class EventService {
         }
         return recordToResponses;
     }
+
+
+//    public EventResponse getEventById(String id){
+//
+//        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
+//
+////        Optional<EventRecord> record = eventRepository.findById(id);
+//
+////        EventResponse recordToResponses = record.map(this::recordToResponse)
+////                                                .orElse(null);
+//
+//        EventResponse recordToResponses = lambdaDataToResponse(lambdaResponse);
+////        if(record.isPresent()){
+////            cache.add(record.get().getId(), record);
+////        }
+//
+//        if(lambdaResponse != null){
+//            cache.addToCash(lambdaResponse.getId(), recordToResponses);
+//        }
+//        return recordToResponses;
+//    }
 
     /**
      *
@@ -77,6 +101,8 @@ public class EventService {
      *                            allowing Event to be created.
      */
     public EventResponse addNewEvent(CreateEventRequest createEventRequest){
+
+       // EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), createEventRequest.getUser(), createEventRequest.getListOfAttending(), createEventRequest.getAddress(), createEventRequest.getDescription()));
 
         EventRecord eventRecord = new EventRecord();
 
@@ -124,6 +150,33 @@ public class EventService {
         }
 
         return events.stream().map(this::eventToResponse).collect(Collectors.toList());
+    }
+
+    public EventResponse lambdaDataToResponse(EventResponseData eventRecord){
+
+        if(eventRecord == null){
+            return null;
+        }
+
+        List<Customer> customerListAttending = new ArrayList<>();
+        for (int i = 0; i < eventRecord.getListOfAttending().size(); i++){
+            Customer newCustomer = new Customer();
+            newCustomer.setId(eventRecord.getListOfAttending().get(i).getId());
+            newCustomer.setName(eventRecord.getListOfAttending().get(i).getName());
+            newCustomer.setEmail(eventRecord.getListOfAttending().get(i).getEmail());
+            customerListAttending.add(newCustomer);
+        }
+
+        EventResponse eventResponse = new EventResponse();
+        eventResponse.setId(eventRecord.getId());
+        eventResponse.setName(eventRecord.getName());
+        eventResponse.setDate(eventRecord.getDate());
+        eventResponse.setUser(new User(eventRecord.getUser().getId(), eventRecord.getUser().getName(), eventRecord.getUser().getEmail()));
+        eventResponse.setListOfAttending(customerListAttending);
+        eventResponse.setAddress(eventRecord.getAddress());
+        eventResponse.setDescription(eventRecord.getDescription());
+
+        return eventResponse;
     }
 
 
