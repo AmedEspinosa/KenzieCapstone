@@ -36,7 +36,7 @@ public class EventService {
 
     public EventResponse getEventById(String id){
 
-        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
+        //EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
 
         Optional<EventRecord> record = eventRepository.findById(id);
 
