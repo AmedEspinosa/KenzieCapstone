@@ -15,7 +15,7 @@ class CalendarPage extends BaseClass {
     }
 
     async loadIntoTable() {
-        const eventInfo = this.dataStore.get("attending");
+        const eventInfo = this.dataStore.get("event");
 
         let eventTable = document.getElementById("upcoming_events");
 
