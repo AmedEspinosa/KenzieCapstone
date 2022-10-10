@@ -8,9 +8,9 @@ module.exports = {
     usedExports: true
   },
   entry: {
+    calendarPage: path.resolve(__dirname, 'src', 'pages', 'calendarPage.js'),
     landingPage: path.resolve(__dirname, 'src', 'pages', 'landingPage.js'),
-    calendarPage: path.resolve(__dirname, 'src', 'pages', 'calendarPage.js')
-    //Add other JS pages once completed
+    searchPage: path.resolve(__dirname, 'src', 'pages', 'searchPage.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -21,15 +21,15 @@ module.exports = {
     port: 8080,
     open: true,
     openPage: 'http://localhost:8080/home_page.html',
-    // disableHostChecks, otherwise we get an error about headers and the page won't render
+    // diableHostChecks, otherwise we get an error about headers and the page won't render
     disableHostCheck: true,
     contentBase: 'packaging_additional_published_artifacts',
     // overlay shows a full-screen overlay in the browser when there are compiler errors or warnings
     overlay: true,
-    proxy:[
+    proxy: [
       {
         context: [
-          '/events'
+          '/event'
         ],
         target: 'http://localhost:5001'
       }
@@ -37,18 +37,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html',
-      inject: false
-    }),
-    new HtmlWebpackPlugin({
       template: './src/home_page.html',
       filename: 'home_page.html',
       inject: false
     }),
     new HtmlWebpackPlugin({
-      template: './src/forgot_password.html',
-      filename: 'forgot_password.html',
+      template: './src/calendar.html',
+      filename: 'calendar.html',
       inject: false
     }),
     new HtmlWebpackPlugin({
@@ -57,8 +52,13 @@ module.exports = {
       inject: false
     }),
     new HtmlWebpackPlugin({
-      template: './src/calendar.html',
-      filename: 'calendar.html',
+      template: './src/forgot_password.html',
+      filename: 'forgot_password.html',
+      inject: false
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
       inject: false
     }),
     new HtmlWebpackPlugin({
@@ -76,6 +76,7 @@ module.exports = {
       filename: 'search_page.html',
       inject: false
     }),
+
     new CopyPlugin({
       patterns: [
         {

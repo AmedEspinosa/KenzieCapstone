@@ -71,6 +71,30 @@ public class EventServiceTest {
         Assertions.assertEquals(record.getId(), eventResponse.get().getId(), "The id matches");
         Assertions.assertEquals(record.getName(), eventResponse.get().getName(), "The name matches");
     }
+
+//    @Test
+//    void getEventById() {
+//        // GIVEN
+//        String id = randomUUID().toString();
+//        List<Customer> usersAttending = mock(List.class);
+//        User user = new User(UUID.randomUUID().toString(), mockNeat.strings().get(), mockNeat.strings().get());
+//
+//        EventRecord record = new EventRecord();
+//        record.setId(id);
+//        record.setName(mockNeat.strings().get());
+//        record.setUser(user);
+//        record.setListOfAttending(usersAttending);
+//        record.setAddress(mockNeat.strings().get());
+//        record.setDescription(mockNeat.strings().get());
+//        // WHEN
+//        //when(eventRepository.findById(id)).thenReturn(Optional.of(record));
+//        when(cacheStore.get(record.getId())).thenReturn(Optional.of(record));
+//        EventResponse eventResponse = eventService.getEventById(id);
+//        // THEN
+//        Assertions.assertNotNull(eventResponse, "The event is returned");
+//        Assertions.assertEquals(record.getId(), eventResponse.getId(), "The id matches");
+//        Assertions.assertEquals(record.getName(), eventResponse.getName(), "The name matches");
+//    }
     /** ------------------------------------------------------------------------
      *  eventService.addNewEvent
      *  ------------------------------------------------------------------------ **/
