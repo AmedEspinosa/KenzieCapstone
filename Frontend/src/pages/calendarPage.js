@@ -9,6 +9,12 @@ class CalendarPage extends BaseClass {
         this.dataStore = new DataStore();
     }
 
+    async mount() {
+        this.client = new eventClient();
+        this.dataStore.addChangeListener(this.loadIntoTable);
+        this.onGetTable();
+    }
+
     async onGetTable() {
         let result = await this.client.getAllEvents(this.errorHandler);
         this.dataStore.set(result);
@@ -47,17 +53,11 @@ class CalendarPage extends BaseClass {
             eventTable.innerHTML = "<tr><td> no one attending.. </td></tr>"
         }
     }
-
-    async mount() {
-        this.event = new eventClient();
-        this.dataStore.addChangeListener(this.loadIntoTable);
-        this.onGetTable();
-    }
 }
 
 const main = async () => {
     const calendarPage = new CalendarPage();
-    calendarPage.mount();
+    await calendarPage.mount();
 };
 
 
