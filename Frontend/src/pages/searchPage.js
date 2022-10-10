@@ -15,7 +15,7 @@ class SearchPage extends BaseClass {
         let id = document.getElementById("id2").value;
         this.dataStore.set("event", null);
 
-        let result = await this.event.getEventById(id, this.errorHandler);
+        let result = await this.client.getEventById(id, this.errorHandler);
         this.dataStore.set("event", result);
 
         if (result) {
