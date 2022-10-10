@@ -6,10 +6,18 @@ class LandingPage extends BaseClass {
     constructor() {
         super();
         this.bindClassMethods(['onCreateEvent', 'onUpdateEvent', 'onDeleteEvent', 'onGet'], this);
+        // this.dataStore = new DataStore();
+    }
 
-        this.bindClassMethods(['onCreateEvent', 'onUpdateEvent', 'onDeleteEvent'], this);
+    async mount() {
+        console.log("we have mounted")
+        document.getElementById("create_event_form").addEventListener('submit', this.onCreateEvent);
+        document.getElementById("get_event_form").addEventListener('submit', this.onGet);
+        document.getElementById("update_event_form").addEventListener('submit', this.onUpdateEvent);
+        document.getElementById("delete_event").addEventListener('submit', this.onDeleteEvent);
 
-        this.dataStore = new DataStore();
+        // document.getElementById().addEventListener()
+        this.client = new eventClient();
     }
 
     async onCreateEvent(event) {
@@ -18,12 +26,33 @@ class LandingPage extends BaseClass {
 
         let name = document.getElementById("name").value;
         let date = document.getElementById("date").value;
-        let user = document.getElementById("user").value;
-        let listOfAttending = document.getElementById("list_Attending").value;
+        let user = {
+            id: "1",
+            name: "Bobby",
+            email: "emailOfUser@email.com"
+        }
+        // let listOfAttending = document.getElementById("list_Attending").value;
+        // let listOfAttending = document.getElementById("list_Attending").value;
+        let listOfAttending =
+            [
+                {
+                    id: "1",
+                    name: "Bobby",
+                    email: "email"
+                }
+            ];
         let address = document.getElementById("address").value;
         let description = document.getElementById("description").value;
 
-        const createdEvent = await this.event.addEvent(name,date,user,listOfAttending,address,description);
+        console.log(name);
+        console.log(date);
+        console.log(user);
+        console.log(listOfAttending);
+        console.log(address);
+        console.log(description);
+
+        const createdEvent = await this.client.addEvent(name,date,user,listOfAttending,address,description);
+
         this.dataStore.set("createdEvent",createdEvent);
 
         if (createdEvent) {
@@ -78,11 +107,11 @@ class LandingPage extends BaseClass {
         event.preventDefault();
 
         let id = document.getElementById("id2").value;
-        this.dataStore.set("event", null);
+        // this.dataStore.set("event", null);
 
-        let result = await this.event.getEventById(id, this.errorHandler);
-        this.dataStore.set("event", result);
-
+        let result = await this.client.getEventById(id, this.errorHandler);
+        //this.dataStore.set("event", result);
+        console.log(`Result found ${result.name}`);
         if (result) {
             this.showMessage(`Found event ${result.name}!`)
         } else {
@@ -92,8 +121,10 @@ class LandingPage extends BaseClass {
 }
 
 const main = async () => {
+    console.log("We hit main")
     const landingPage = new LandingPage();
-    landingPage.mount();
+    console.log("landing page is instantiated")
+    await landingPage.mount();
 };
 
 

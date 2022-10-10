@@ -104,7 +104,9 @@
                 <textarea id="description" rows="8" required></textarea>
                 <label for="description">Description of Event</label>
             </div>
-            <button id="createButton" type="submit">Create Event </button>
+
+            <button type="submit" onclick="onCreateEvent()">Create Event </button>
+
     </form>
 </div>
 
@@ -182,6 +184,7 @@
 <script>
 
     function showCreateEventForm(){
+        console.log("Show create event form hit")
         document.getElementById('create_event_form').style.display = 'block';
         document.getElementById('back').style.display = 'block';
         document.getElementById('button1').style.visibility = 'hidden';
@@ -216,7 +219,5 @@
         document.getElementById('button3').style.visibility = 'hidden';
         document.getElementById('button4').style.visibility = 'hidden';
     }
-
-
 
 </script>
