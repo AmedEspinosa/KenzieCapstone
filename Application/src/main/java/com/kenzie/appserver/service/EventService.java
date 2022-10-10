@@ -103,7 +103,7 @@ public class EventService {
     public EventResponse addNewEvent(CreateEventRequest createEventRequest){
 
        // EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), createEventRequest.getUser(), createEventRequest.getListOfAttending(), createEventRequest.getAddress(), createEventRequest.getDescription()));
-
+        System.out.println("We Are creating the event in the event service");
         EventRecord eventRecord = new EventRecord();
 
         if (createEventRequest != null){
@@ -115,8 +115,9 @@ public class EventService {
                 eventRecord.setListOfAttending(createEventRequest.getListOfAttending());
                 eventRecord.setAddress(createEventRequest.getAddress());
                 eventRecord.setDescription(createEventRequest.getDescription());
+                System.out.println(eventRecord.getId());
                 eventRepository.save(eventRecord);
-
+                System.out.println(eventRecord.getId());
                 return recordToResponse(eventRecord);
             }
 //        }
