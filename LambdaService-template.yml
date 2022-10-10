@@ -100,7 +100,7 @@ Resources:
         UpdateResource:
           Type: Api
           Properties:
-            Path: /events/event
+            Path: /events/
             Method: post
   GetAllEventsDataFunction:
     Type: AWS::Serverless::Function

@@ -64,6 +64,8 @@ public class EndpointUtility {
         String api = getApiEndpint();
         String url = api + endpoint;
 
+        System.out.println("Url in postEndpoint utility class");
+        System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
         HttpRequest request = HttpRequest.newBuilder()
@@ -89,6 +91,7 @@ public class EndpointUtility {
         String api = getApiEndpint();
         String url = api + endpoint;
 
+        System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
         HttpRequest request = HttpRequest.newBuilder()

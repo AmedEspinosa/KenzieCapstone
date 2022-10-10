@@ -36,38 +36,19 @@ public class EventService {
 
     public EventResponse getEventById(String id){
 
-        //EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
+        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
 
-        Optional<EventRecord> record = eventRepository.findById(id);
+        EventResponse recordToResponses = lambdaDataToResponse(lambdaResponse);
 
-        EventResponse recordToResponses = record.map(this::recordToResponse)
-                                                .orElse(null);
-        if(record.isPresent()){
-            cache.add(record.get().getId(), record);
+
+        if(lambdaResponse != null){
+            cache.addToCash(lambdaResponse.getId(), recordToResponses);
         }
+        System.out.println("recordToResponses is finished returning the recordToResponse");
+        System.out.println(recordToResponses.getId());
+
         return recordToResponses;
     }
-
-
-//    public EventResponse getEventById(String id){
-//
-//        EventResponseData lambdaResponse = lambdaServiceClient.getEventById(id);
-//
-////        Optional<EventRecord> record = eventRepository.findById(id);
-//
-////        EventResponse recordToResponses = record.map(this::recordToResponse)
-////                                                .orElse(null);
-//
-//        EventResponse recordToResponses = lambdaDataToResponse(lambdaResponse);
-////        if(record.isPresent()){
-////            cache.add(record.get().getId(), record);
-////        }
-//
-//        if(lambdaResponse != null){
-//            cache.addToCash(lambdaResponse.getId(), recordToResponses);
-//        }
-//        return recordToResponses;
-//    }
 
     /**
      *
@@ -102,26 +83,25 @@ public class EventService {
      */
     public EventResponse addNewEvent(CreateEventRequest createEventRequest){
 
-       // EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), createEventRequest.getUser(), createEventRequest.getListOfAttending(), createEventRequest.getAddress(), createEventRequest.getDescription()));
-        System.out.println("We Are creating the event in the event service");
-        EventRecord eventRecord = new EventRecord();
+        List<com.kenzie.capstone.service.model.Customer> listOfUsersAttendingOnCreate = new ArrayList<>();
+        for(int i = 0; i < createEventRequest.getListOfAttending().size(); i++){
+            com.kenzie.capstone.service.model.Customer newCustomer = new com.kenzie.capstone.service.model.Customer();
+            newCustomer.setId(createEventRequest.getListOfAttending().get(i).getId());
+            newCustomer.setName(createEventRequest.getListOfAttending().get(i).getName());
+            newCustomer.setEmail(createEventRequest.getListOfAttending().get(i).getEmail());
+            listOfUsersAttendingOnCreate.add(newCustomer);
+        }
 
-        if (createEventRequest != null){
-//            if (eventUserRepository.existsById(createEventRequest.getUser().getId())) {
-                eventRecord.setId(UUID.randomUUID().toString());
-                eventRecord.setName(createEventRequest.getName());
-                eventRecord.setDate(createEventRequest.getDate());
-                eventRecord.setUser(createEventRequest.getUser());
-                eventRecord.setListOfAttending(createEventRequest.getListOfAttending());
-                eventRecord.setAddress(createEventRequest.getAddress());
-                eventRecord.setDescription(createEventRequest.getDescription());
-                System.out.println(eventRecord.getId());
-                eventRepository.save(eventRecord);
-                System.out.println(eventRecord.getId());
-                return recordToResponse(eventRecord);
-            }
-//        }
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CreateEventRequest was either null or id was invalid");
+        EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), new com.kenzie.capstone.service.model.User(createEventRequest.getUser().getId(), createEventRequest.getUser().getName(), createEventRequest.getUser().getEmail()), listOfUsersAttendingOnCreate, createEventRequest.getAddress(), createEventRequest.getDescription()));
+        System.out.println("We Are creating the event in the event service");
+
+        EventResponse recordToResponses = lambdaDataToResponse(lambdaResponse);
+        if(lambdaResponse.toString() == ""){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The lambda did not work response was an empty string");
+        } else{
+            return recordToResponses;
+        }
+
     }
 
     public void deleteEvent(String eventId){
