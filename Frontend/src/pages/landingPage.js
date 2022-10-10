@@ -54,15 +54,13 @@ class LandingPage extends BaseClass {
 
         const createdEvent = await this.client.addEvent(name,date,user,listOfAttending,address,description);
 
-        this.dataStore.set("createdEvent",createdEvent);
+        // this.dataStore.set("createdEvent",createdEvent);
 
         if (createdEvent) {
-            this.showMessage(`Created ${createdEvent.name}!`)
+            this.showMessage(`Created ${createdEvent.id}!`)
         } else {
             this.errorHandler("Error creating! Try again...")
         }
-
-
 
     }
 
