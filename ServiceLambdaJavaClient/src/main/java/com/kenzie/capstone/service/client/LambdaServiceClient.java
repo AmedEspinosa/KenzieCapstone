@@ -6,6 +6,8 @@ import com.kenzie.capstone.service.model.CreateEventRequestData;
 import com.kenzie.capstone.service.model.EventResponseData;
 import com.kenzie.capstone.service.model.ExampleData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -13,6 +15,7 @@ public class LambdaServiceClient {
 
     private static final String GET_EVENT_BY_ID_ENDPOINT = "events/{id}";
     private static final String POST_EVENT_ENDPOINT = "events";
+    private static final String GET_ALL_EVENTS_ENDPOINT = "events/all";
 
     private ObjectMapper mapper;
 
@@ -58,6 +61,21 @@ public class LambdaServiceClient {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
         return eventResponseData;
+    }
+
+    public List<EventResponseData> getAllEvents() {
+        System.out.println("GetAllEvents is hit in lambdaserviceclient");
+        EndpointUtility endpointUtility = new EndpointUtility();
+        String response = endpointUtility.getAllEndpoint(GET_ALL_EVENTS_ENDPOINT);
+        System.out.println("This is the response of lists");
+        System.out.println(response);
+        String eventResponseData;
+        try {
+            eventResponseData = mapper.readValue(response, String.class);
+        } catch (Exception e) {
+            throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
+        }
+        return new ArrayList<>();
     }
 
 }

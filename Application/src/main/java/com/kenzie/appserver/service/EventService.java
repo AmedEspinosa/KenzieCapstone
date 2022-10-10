@@ -116,7 +116,9 @@ public class EventService {
     }
 
     public List<EventResponse> getAllEvents(){
-
+        System.out.println("Before Lambda");
+        List<EventResponseData> allOfEvents = this.lambdaServiceClient.getAllEvents();
+        System.out.println("AFter lambda");
         Iterable<EventRecord> responseOfRecords = eventRepository.findAll();
         List<Event> events = new ArrayList<>();
 
