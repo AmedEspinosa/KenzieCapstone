@@ -24,7 +24,6 @@ class LandingPage extends BaseClass {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
 
-        console.log("The oncreate was hit")
         let name = document.getElementById("name").value;
         let date = document.getElementById("date").value;
         let user = {
@@ -68,7 +67,6 @@ class LandingPage extends BaseClass {
         // Prevent the page from refreshing on form submit
         event.preventDefault();
 
-
         let id = document.getElementById("id3").value;
         let name = document.getElementById("name3").value;
         let date = document.getElementById("date3").value;
@@ -77,10 +75,10 @@ class LandingPage extends BaseClass {
         let address = document.getElementById("address3").value;
         let description = document.getElementById("description3").value;
 
-        let original = await this.event.getEventById(id,this.errorHandler);
+        let original = await this.client.getEventById(id,this.errorHandler);
         this.dataStore.set("event",original);
         if (original) {
-            let update = await this.event.updateEvent(id,name,date,user,listOfAttending,address,description);
+            let update = await this.client.updateEvent(id,name,date,user,listOfAttending,address,description);
             this.dataStore.set("event",update);
             this.showMessage(`Updated ${update.name}!`)
         } else{
@@ -92,14 +90,13 @@ class LandingPage extends BaseClass {
     async onDeleteEvent(event) {
         event.preventDefault();
 
-
         let id = document.getElementById("id4").value;
         this.dataStore.set("event", null);
-        let result = await this.event.getEventById(id, this.errorHandler);
+        let result = await this.client.getEventById(id, this.errorHandler);
         this.dataStore.set("event", result);
         if (result) {
             this.showMessage(`Found event ${result.name}!`);
-            await this.event.deleteEventById(id, this.errorHandler);
+            await this.client.deleteEventById(id, this.errorHandler);
             this.showMessage(`Deleted event ${result.name}`);
         } else {
             this.errorHandler("No event found with given ID!");
