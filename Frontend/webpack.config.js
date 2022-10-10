@@ -77,12 +77,15 @@ module.exports = {
       inject: false
     }),
 
-
     new CopyPlugin({
       patterns: [
         {
           from: path.resolve('src/css'),
           to: path.resolve("dist/css")
+        },
+        {
+          from: path.resolve('src/images'),
+          to: path.resolve("dist/images")
         }
       ]
     }),
