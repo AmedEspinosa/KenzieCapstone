@@ -46,11 +46,7 @@ public class EventService {
             return recordToResponses;
         } else {
             return null;
-        }
-        System.out.println("recordToResponses is finished returning the recordToResponse");
-        System.out.println(recordToResponses.getId());
-
-        return recordToResponses;
+            }
     }
 
     public EventResponse getEventByIdToLocal(String id){
