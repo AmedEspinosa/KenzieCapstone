@@ -64,6 +64,8 @@ public class EndpointUtility {
         String api = getApiEndpint();
         String url = api + endpoint;
 
+        System.out.println("Url in postEndpoint utility class");
+        System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
         HttpRequest request = HttpRequest.newBuilder()
@@ -89,6 +91,33 @@ public class EndpointUtility {
         String api = getApiEndpint();
         String url = api + endpoint;
 
+        System.out.println(url);
+        HttpClient client = HttpClient.newHttpClient();
+        URI uri = URI.create(url);
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(uri)
+                .header("Accept", "application/json")
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = httpResponse.statusCode();
+            if (statusCode == 200) {
+                return httpResponse.body();
+            } else {
+                throw new ApiGatewayException("GET request failed: " + statusCode + " status code received");
+            }
+        } catch (IOException | InterruptedException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String getAllEndpoint(String endpoint) {
+        String api = getApiEndpint();
+        String url = api + endpoint;
+
+        System.out.println(url);
         HttpClient client = HttpClient.newHttpClient();
         URI uri = URI.create(url);
         HttpRequest request = HttpRequest.newBuilder()

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheStore {
     private Cache<String, Optional<EventRecord>> cache;
-    //private Cache<String, Optional<EventResponse>> cacheLambda;
+    private Cache<String, Optional<EventResponse>> cacheLambda;
     private EventRepository eventRepository;
 
     public CacheStore(int expiry, TimeUnit timeUnit) {
@@ -23,10 +23,10 @@ public class CacheStore {
                 .concurrencyLevel(Runtime.getRuntime().availableProcessors())
                 .build();
 
-//        this.cacheLambda = CacheBuilder.newBuilder()
-//                .expireAfterWrite(expiry, timeUnit)
-//                .concurrencyLevel(Runtime.getRuntime().availableProcessors())
-//                .build();
+        this.cacheLambda = CacheBuilder.newBuilder()
+                .expireAfterWrite(expiry, timeUnit)
+                .concurrencyLevel(Runtime.getRuntime().availableProcessors())
+                .build();
     }
 
     public Optional<EventRecord> get(String key) {
@@ -44,8 +44,8 @@ public class CacheStore {
         cache.put(key, value);
     }
 
-//    public void addToCash(String key, EventResponse value) {
-//
-//        cacheLambda.put(key, Optional.ofNullable(value));
-//    }
+    public void addToCash(String key, EventResponse value) {
+
+        cacheLambda.put(key, Optional.ofNullable(value));
+    }
 }

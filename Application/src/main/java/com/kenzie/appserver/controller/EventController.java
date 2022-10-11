@@ -41,7 +41,8 @@ public class EventController {
         }
         EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
-        return ResponseEntity.created(URI.create("/event/" + eventResponse.getName())).body(eventResponse);
+        return ResponseEntity.ok(eventResponse);
+//        return ResponseEntity.created(URI.create("/event/" + eventResponse.getName())).body(eventResponse);
     }
 
     // What do we want to be available to be updated?

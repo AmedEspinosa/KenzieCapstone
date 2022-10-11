@@ -17,7 +17,7 @@ public class CreateEventRequestData {
 
     public CreateEventRequestData(String id, String name, String date, User user, List<Customer> ListOfAttending,
                               String address, String description){
-        this.id = id;
+        this.id = "1";
         this.name = name;
         this.date = date;
         this.user = user;
