@@ -43,6 +43,9 @@ public class EventService {
 
         if(lambdaResponse != null){
             cache.addToCash(lambdaResponse.getId(), recordToResponses);
+            return recordToResponses;
+        } else {
+            return null;
         }
         System.out.println("recordToResponses is finished returning the recordToResponse");
         System.out.println(recordToResponses.getId());

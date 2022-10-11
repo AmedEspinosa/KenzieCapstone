@@ -9,6 +9,7 @@ import com.kenzie.appserver.service.UserService;
 import com.kenzie.appserver.service.model.Customer;
 import com.kenzie.appserver.service.model.User;
 import net.andreinc.mockneat.MockNeat;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -73,7 +74,7 @@ class EventControllerTest {
         createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
-        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEventLocally(createEventRequest);
 
         // WHEN
         eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
@@ -165,7 +166,7 @@ class EventControllerTest {
         createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
-        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEventLocally(createEventRequest);
 
         // WHEN
         EventUpdateRequest updateRequest = new EventUpdateRequest();
@@ -214,12 +215,11 @@ class EventControllerTest {
         createEventRequest.setDescription(mockNeat.strings().get());
 
         // WHEN
-        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEventLocally(createEventRequest);
 
        eventQueryUtility.eventControllerClient.deleteEvent(eventResponse.getId())
                 .andExpect(status().isOk());
 
-        eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
-                .andExpect(status().isNotFound());
+        Assertions.assertEquals(null, eventService.getEventById(eventResponse.getId()));
     }
 }
