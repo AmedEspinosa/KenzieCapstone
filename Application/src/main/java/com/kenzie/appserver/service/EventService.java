@@ -49,6 +49,18 @@ public class EventService {
             }
     }
 
+    public EventResponse getEventByIdToLocal(String id){
+
+        Optional<EventRecord> record = eventRepository.findById(id);
+
+        EventResponse recordToResponses = record.map(this::recordToResponse)
+                .orElse(null);
+        if(record.isPresent()){
+            cache.add(record.get().getId(), record);
+        }
+        return recordToResponses;
+    }
+
     /**
      *
      * @param eventUpdateRequest - checks to make sure that the user who has created the event is the
@@ -101,6 +113,29 @@ public class EventService {
             return recordToResponses;
         }
 
+    }
+
+    public EventResponse addNewEventLocally(CreateEventRequest createEventRequest){
+
+        // EventResponseData lambdaResponse = lambdaServiceClient.postNewEvent(new CreateEventRequestData(createEventRequest.getId(), createEventRequest.getName(), createEventRequest.getDate(), createEventRequest.getUser(), createEventRequest.getListOfAttending(), createEventRequest.getAddress(), createEventRequest.getDescription()));
+
+        EventRecord eventRecord = new EventRecord();
+
+        if (createEventRequest != null){
+//            if (eventUserRepository.existsById(createEventRequest.getUser().getId())) {
+            eventRecord.setId(UUID.randomUUID().toString());
+            eventRecord.setName(createEventRequest.getName());
+            eventRecord.setDate(createEventRequest.getDate());
+            eventRecord.setUser(createEventRequest.getUser());
+            eventRecord.setListOfAttending(createEventRequest.getListOfAttending());
+            eventRecord.setAddress(createEventRequest.getAddress());
+            eventRecord.setDescription(createEventRequest.getDescription());
+            eventRepository.save(eventRecord);
+
+            return recordToResponse(eventRecord);
+        }
+//        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CreateEventRequest was either null or id was invalid");
     }
 
     public void deleteEvent(String eventId){

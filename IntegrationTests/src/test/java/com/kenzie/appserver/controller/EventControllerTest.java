@@ -74,7 +74,7 @@ class EventControllerTest {
         createEventRequest.setAddress(mockNeat.addresses().get());
         createEventRequest.setDescription(mockNeat.strings().get());
 
-        EventResponse eventResponse = eventService.addNewEventLocally(createEventRequest);
+        EventResponse eventResponse = eventService.addNewEvent(createEventRequest);
 
         // WHEN
         eventQueryUtility.eventControllerClient.getEventById(eventResponse.getId())
@@ -93,7 +93,6 @@ class EventControllerTest {
                 .andExpect(jsonPath("description")
                         .value(is(createEventRequest.getDescription())))
                 .andExpect(status().isOk());
-        eventQueryUtility.eventControllerClient.deleteEvent(eventResponse.getId());
 
     }
 
@@ -137,8 +136,6 @@ class EventControllerTest {
                 .andExpect(jsonPath("description")
                         .value(is(createEventRequest.getDescription())))
                 .andExpect(status().is2xxSuccessful());
-
-        eventQueryUtility.eventControllerClient.deleteEvent(createEventRequest.getId());
     }
 
     @Test
@@ -220,6 +217,6 @@ class EventControllerTest {
        eventQueryUtility.eventControllerClient.deleteEvent(eventResponse.getId())
                 .andExpect(status().isOk());
 
-        Assertions.assertEquals(null, eventService.getEventById(eventResponse.getId()));
+        Assertions.assertEquals(null, eventService.getEventByIdToLocal(eventResponse.getId()));
     }
 }
