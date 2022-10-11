@@ -29,7 +29,9 @@
 }
 
 .table tbody tr:nth-of-type(even) {
-    background-color: #fff;
+    /*background-color: #fff;*/
+    background-color: transparent;
+
 }
 
 .table tbody tr:last-of-type {
